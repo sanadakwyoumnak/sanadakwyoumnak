@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f5ef">
+  <meta name="description" content="سندك ويمناك — شريكك العقاري في جدة والمدينة المنورة. بيع وشراء وتأجير وإدارة واستثمار عقاري بثقة.">
+  <title>سندك ويمناك | وجهتك العقارية في جدة والمدينة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1d302d;
+      --muted: #71817a;
+      --green: #21483e;
+      --green-dark: #18372f;
+      --sage: #dce5d8;
+      --cream: #f7f5ef;
+      --paper: #fffefa;
+      --gold: #c99c59;
+      --line: rgba(29, 48, 45, .12);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "IBM Plex Sans Arabic", "DM Sans", sans-serif;
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    img { display: block; width: 100%; }
+    .container { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      color: var(--green); font-size: 12px; font-weight: 700;
+      letter-spacing: .03em;
+    }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--gold); }
+    .section-heading {
+      display: flex; justify-content: space-between; align-items: end;
+      gap: 24px; margin-bottom: 42px;
+    }
+    .section-heading h2 {
+      margin: 13px 0 0; font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.28; letter-spacing: -.045em; font-weight: 600;
+    }
+    .section-heading p { max-width: 380px; margin: 0; color: var(--muted); line-height: 1.9; font-size: 14px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+      min-height: 52px; padding: 0 22px; border: 1px solid transparent;
+      border-radius: 999px; font-size: 13px; font-weight: 600;
+      transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+      cursor: pointer;
+    }
+    .button:hover { transform: translateY(-3px); }
+    .button-dark { color: white; background: var(--green); }
+    .button-dark:hover { background: var(--green-dark); }
+    .button-light { color: var(--ink); background: white; border-color: var(--line); }
+    .button-light:hover { border-color: var(--green); }
+    .button svg { width: 16px; height: 16px; }
+
+    /* Navigation */
+    .site-header {
+      position: fixed; z-index: 20; inset: 0 0 auto; height: 84px;
+      transition: background .3s ease, box-shadow .3s ease, height .3s ease;
+    }
+    .site-header.scrolled {
+      height: 72px; background: rgba(247, 245, 239, .93);
+      box-shadow: 0 1px 0 var(--line); backdrop-filter: blur(14px);
+    }
+    .nav-wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 11px; flex: 0 0 auto; }
+    .brand-mark {
+      display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgba(201,156,89,.3);
+      border-radius: 15px; color: white; background: linear-gradient(145deg, #2b594a, #18372f);
+      box-shadow: 0 5px 13px rgba(24,55,47,.13), inset 0 1px 0 rgba(255,255,255,.13);
+    }
+    .brand-mark svg { width: 33px; height: 33px; overflow: visible; }
+    .brand-name { display: grid; gap: 1px; font-weight: 700; font-size: 14px; line-height: 1.25; }
+    .brand-name small { color: var(--muted); font-size: 9px; font-weight: 500; letter-spacing: .09em; }
+    .nav-links { display: flex; align-items: center; gap: clamp(18px, 3vw, 38px); margin: 0; padding: 0; list-style: none; }
+    .nav-links a { color: #53645d; font-size: 12px; transition: color .2s ease; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    .nav-actions { display: flex; align-items: center; gap: 14px; }
+    .nav-contact { display: inline-flex; align-items: center; gap: 8px; font: 600 12px/1 "DM Sans", var(--sans); direction: ltr; transition: color .2s ease; }
+    .nav-contact:hover { color: var(--green); }
+    .nav-contact svg { width: 16px; height: 16px; color: var(--green); }
+    .nav-actions .button { min-height: 42px; padding-inline: 17px; font-size: 11px; }
+    .menu-toggle {
+      display: none; align-items: center; justify-content: center; width: 42px; height: 42px;
+      color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
+    }
+    .menu-toggle svg { width: 20px; height: 20px; }
+
+    /* Hero */
+    .hero { position: relative; overflow: hidden; padding: 150px 0 85px; }
+    .hero::before {
+      position: absolute; content: ""; width: 510px; height: 510px; border-radius: 50%;
+      background: #e8ebdf; top: -290px; inset-inline-start: -200px; filter: blur(2px);
+    }
+    .hero-grid { position: relative; display: grid; grid-template-columns: 1fr 1.02fr; align-items: center; gap: clamp(45px, 8vw, 110px); }
+    .hero-copy { max-width: 500px; }
+    .hero-copy h1 { margin: 19px 0 20px; font-size: clamp(43px, 6vw, 72px); line-height: 1.2; letter-spacing: -.06em; font-weight: 600; }
+    .hero-copy h1 span { color: var(--green); }
+    .hero-copy > p { max-width: 455px; margin: 0; color: var(--muted); font-size: 15px; line-height: 2; }
+    .hero-cta { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
+    .hero-note { display: flex; align-items: center; gap: 11px; margin-top: 43px; }
+    .avatar-stack { display: flex; direction: ltr; padding-left: 5px; }
+    .avatar-stack span {
+      display: grid; place-items: center; width: 31px; height: 31px; margin-left: -6px;
+      border: 2px solid var(--cream); border-radius: 50%; color: var(--green); background: #d9e3da;
+      font-size: 10px; font-weight: 700;
+    }
+    .avatar-stack span:nth-child(2) { background: #e9d8bd; }
+    .avatar-stack span:nth-child(3) { background: #c8d6ca; }
+    .hero-note p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+    .hero-note strong { color: var(--ink); font-size: 12px; }
+    .hero-visual { position: relative; min-height: 510px; }
+    .hero-image-wrap {
+      position: absolute; inset: 0 30px 0 0; overflow: hidden;
+      border-radius: 190px 190px 18px 18px; background: #d5ddd1;
+    }
+    .hero-image-wrap::after {
+      position: absolute; content: ""; inset: 0;
+      background: linear-gradient(180deg, transparent 53%, rgba(14, 33, 27, .38));
+    }
+    .hero-image-wrap img { height: 100%; object-fit: cover; object-position: center; animation: image-arrive 1.2s cubic-bezier(.2,.8,.2,1) both; }
+    .image-caption { position: absolute; z-index: 1; bottom: 25px; right: 27px; color: white; }
+    .image-caption small { display: block; margin-bottom: 5px; opacity: .8; font-size: 10px; }
+    .image-caption strong { font-size: 17px; font-weight: 500; }
+    .image-caption span { display: inline-block; margin-right: 10px; color: #e8c58a; font-size: 12px; }
+    .floating-card {
+      position: absolute; z-index: 2; display: flex; align-items: center; gap: 12px;
+      padding: 14px 17px; border: 1px solid rgba(255,255,255,.7); border-radius: 15px;
+      background: rgba(255,254,250,.94); box-shadow: 0 16px 42px rgba(27,48,42,.12);
+      animation: float 5s ease-in-out infinite;
+    }
+    .floating-card.one { top: 105px; right: -8px; }
+    .floating-card.two { bottom: 48px; left: -28px; animation-delay: -2.2s; }
+    .float-icon { display: grid; place-items: center; width: 37px; height: 37px; border-radius: 12px; color: var(--green); background: #e8eee6; }
+    .float-icon svg { width: 19px; height: 19px; }
+    .floating-card small { display: block; color: var(--muted); font-size: 9px; }
+    .floating-card strong { display: block; margin-top: 3px; font-size: 13px; }
+    .hero-stats { display: flex; align-items: center; gap: 36px; margin-top: 48px; }
+    .hero-stat { display: grid; gap: 3px; }
+    .hero-stat strong { font-family: "DM Sans", var(--sans); font-size: 24px; font-weight: 600; }
+    .hero-stat span { color: var(--muted); font-size: 10px; }
+    .hero-stat-divider { width: 1px; height: 38px; background: var(--line); }
+
+    /* Intro strip */
+    .trust-strip { padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .trust-inner { display: flex; justify-content: space-between; align-items: center; gap: 22px; }
+    .trust-inner > span { color: var(--muted); font-size: 10px; }
+    .trust-list { display: flex; align-items: center; gap: clamp(20px, 5vw, 65px); }
+    .trust-list span { color: #53645d; font-size: 12px; font-weight: 600; }
+    .trust-list span::before { content: "✳"; margin-left: 8px; color: var(--gold); font-size: 13px; }
+
+    /* Services */
+    .services {
+      position: relative; overflow: hidden; padding: 112px 0 118px;
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(201,156,89,.1), transparent 30%),
+        radial-gradient(ellipse at 94% 88%, rgba(94,128,105,.17), transparent 34%),
+        linear-gradient(135deg, #172f29 0%, #1d3931 52%, #18342d 100%);
+    }
+    .services::before {
+      position: absolute; content: ""; width: 430px; height: 430px; top: 18%;
+      inset-inline-start: -320px; border: 1px solid rgba(225,213,183,.12);
+      border-radius: 50%; box-shadow: 0 0 0 38px rgba(225,213,183,.035), 0 0 0 78px rgba(225,213,183,.025);
+      pointer-events: none;
+    }
+    .services .container { position: relative; }
+    .services .section-heading { align-items: end; margin-bottom: 42px; }
+    .services .section-heading h2 { color: #f3f0e6; font-size: clamp(38px, 4.7vw, 58px); }
+    .services .section-heading p { max-width: 365px; color: #b6c3b9; font-size: 13px; }
+    .services .eyebrow { color: #d7c49c; }
+    .services .eyebrow::before { background: #c99c59; }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: minmax(204px, auto); gap: 14px; direction: rtl;
+    }
+    .service-card {
+      position: relative; display: flex; min-height: 204px; flex-direction: column;
+      align-items: flex-start; padding: 23px 23px 50px; overflow: hidden;
+      border: 1px solid rgba(222,231,218,.12); border-radius: 21px;
+      background: linear-gradient(145deg, rgba(47,76,65,.96), rgba(38,63,54,.96));
+      box-shadow: 0 12px 30px rgba(8,24,19,.16), inset 0 1px 0 rgba(255,255,255,.045);
+      transition: transform .38s cubic-bezier(.2,.8,.2,1), box-shadow .38s ease, border-color .38s ease;
+    }
+    .service-card::before {
+      position: absolute; content: ""; top: -43px; left: -42px; width: 122px; height: 122px;
+      border: 1px solid rgba(224,211,179,.11); border-radius: 50%;
+      box-shadow: 0 0 0 13px rgba(224,211,179,.035), 0 0 0 27px rgba(224,211,179,.025);
+      transition: transform .5s ease, opacity .3s ease; pointer-events: none;
+    }
+    .service-card:hover { transform: translateY(-6px); border-color: rgba(217,187,129,.42); background: linear-gradient(145deg, #355848, #2b4a3e); box-shadow: 0 22px 42px rgba(8,24,19,.28), inset 0 1px 0 rgba(255,255,255,.08); }
+    .service-card:hover::before { transform: scale(1.13); }
+    .service-index {
+      position: absolute; top: 27px; left: 23px; color: #aab9ae;
+      direction: ltr; unicode-bidi: isolate;
+      font: 600 10px/1 "DM Sans", var(--sans); letter-spacing: .1em;
+    }
+    .service-icon {
+      position: relative; display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: 20px;
+      border: 1px solid rgba(220,204,163,.16); border-radius: 18px;
+      color: #e2c992; background: linear-gradient(145deg, rgba(201,156,89,.16), rgba(201,156,89,.075));
+      box-shadow: 0 5px 15px rgba(8,24,19,.12), inset 0 1px 0 rgba(255,255,255,.08);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), background .3s ease, color .3s ease, box-shadow .3s ease;
+    }
+    .service-card:hover .service-icon { transform: translateY(-3px) rotate(-3deg); color: white; background: linear-gradient(145deg, #315c4d, #21483e); box-shadow: 0 9px 18px rgba(33,72,62,.2); }
+    .service-icon svg { width: 27px; height: 27px; stroke-linecap: round; stroke-linejoin: round; }
+    .service-card h3 { margin: 0 0 8px; color: #f2efe5; font-size: 16px; font-weight: 600; letter-spacing: -.025em; }
+    .service-card p { max-width: 285px; margin: 0; color: #bdc9bf; font-size: 11px; line-height: 1.95; }
+    .service-arrow {
+      position: absolute; bottom: 17px; left: 18px; display: grid; place-items: center;
+      width: 32px; height: 32px; border: 1px solid rgba(227,234,225,.17);
+      border-radius: 50%; color: #d4dfd5; background: rgba(255,255,255,.045);
+      transition: transform .25s ease, color .25s ease, background .25s ease, border-color .25s ease;
+    }
+    .service-arrow svg { width: 15px; height: 15px; }
+    .service-card:hover .service-arrow { transform: translateX(-3px); border-color: #c99c59; color: #1d3931; background: #d9bd87; }
+    .service-card:focus-within { outline: 2px solid rgba(217,189,135,.72); outline-offset: 3px; }
+    .service-featured {
+      grid-column: span 2; grid-row: span 2; min-height: 422px; justify-content: flex-end;
+      padding: 35px 34px 42px; border-color: transparent; color: white;
+      background: var(--green); isolation: isolate;
+    }
+    .service-featured::before, .service-featured::after { position: absolute; content: ""; inset: 0; z-index: -1; }
+    .service-featured::before {
+      inset: 0; inset-inline-start: 20%; inset-inline-end: 0; width: auto; height: auto;
+      border: 0; border-radius: 0; box-shadow: none; opacity: .58;
+      background-image: url("https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85");
+      background-size: cover; background-position: center 56%;
+      mask-image: linear-gradient(to left, transparent, #000 22%, #000);
+    }
+    .service-featured::after { background: linear-gradient(0deg, rgba(14,34,28,.96) 0%, rgba(14,34,28,.58) 46%, rgba(14,34,28,.12) 100%); }
+    .service-featured:hover { border-color: transparent; box-shadow: 0 25px 55px rgba(24,55,47,.25); }
+    .service-featured .service-index { top: 30px; left: 29px; color: rgba(255,255,255,.76); }
+    .service-featured .service-icon { width: 62px; height: 62px; margin-bottom: 23px; border-color: rgba(226,201,146,.35); border-radius: 20px; color: #f1d69e; background: rgba(201,156,89,.2); box-shadow: 0 8px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(8px); }
+    .service-featured .service-icon svg { width: 30px; height: 30px; }
+    .service-featured:hover .service-icon { color: #1d3931; background: #e7d4a9; }
+    .service-featured h3 { margin-bottom: 10px; font-size: 25px; }
+    .service-featured p { max-width: 340px; color: rgba(255,255,255,.82); font-size: 12px; }
+    .service-featured .service-arrow { bottom: 27px; left: 27px; width: 38px; height: 38px; border-color: rgba(255,255,255,.35); color: white; background: rgba(255,255,255,.1); backdrop-filter: blur(8px); }
+    .service-featured:hover .service-arrow { border-color: white; color: var(--green); background: white; }
+    .services-cta {
+      position: relative; display: flex; min-height: 204px; flex-direction: column;
+      align-items: flex-start; justify-content: center; padding: 23px;
+      overflow: hidden; border: 1px solid rgba(217,189,135,.38); border-radius: 21px;
+      color: #f5f0e4; background: linear-gradient(145deg, #92784d, #725e3e); transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .services-cta::after {
+      position: absolute; content: "؟"; left: 8px; bottom: -52px;
+      color: rgba(255,245,222,.075); font-family: var(--serif); font-size: 180px; line-height: 1;
+      pointer-events: none;
+    }
+    .services-cta:hover { transform: translateY(-5px); box-shadow: 0 18px 38px rgba(8,24,19,.25); }
+    .services-cta small { color: #eadbbc; font-size: 10px; }
+    .services-cta strong { max-width: 185px; margin-top: 9px; font-size: 17px; line-height: 1.55; font-weight: 600; }
+    .services-cta a { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; margin-top: 17px; color: #fff3d8; font-size: 11px; font-weight: 700; }
+    .services-cta a svg { width: 15px; height: 15px; transition: transform .25s ease; }
+    .services-cta:hover a svg { transform: translateX(-4px); }
+
+    /* Listings */
+    .properties { padding: 100px 0 110px; background: #eeeee7; }
+    .property-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .property-card { overflow: hidden; border-radius: var(--radius); background: var(--paper); transition: transform .35s ease, box-shadow .35s ease; }
+    .property-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(29,48,45,.1); }
+    .property-image { position: relative; height: 245px; overflow: hidden; background: #dce2d8; }
+    .property-image img { height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+    .property-card:hover .property-image img { transform: scale(1.055); }
+    .property-tag { position: absolute; top: 15px; right: 15px; padding: 7px 12px; border-radius: 99px; color: var(--green); background: rgba(255,254,250,.94); font-size: 10px; font-weight: 600; }
+    .property-favorite { position: absolute; top: 13px; left: 13px; display: grid; place-items: center; width: 35px; height: 35px; border: 0; border-radius: 50%; color: var(--ink); background: rgba(255,254,250,.92); cursor: pointer; transition: color .2s ease, transform .2s ease; }
+    .property-favorite:hover { color: #bd6258; transform: scale(1.08); }
+    .property-favorite.saved { color: #bd6258; }
+    .property-favorite svg { width: 17px; height: 17px; }
+    .property-body { padding: 20px 21px 19px; }
+    .property-location { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 10px; }
+    .property-location svg { width: 13px; height: 13px; color: var(--gold); }
+    .property-body h3 { margin: 10px 0 14px; font-size: 17px; font-weight: 600; }
+    .property-specs { display: flex; gap: 15px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .property-specs span { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 10px; }
+    .property-specs svg { width: 14px; height: 14px; color: #83938a; }
+    .property-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 15px; }
+    .property-price { color: var(--green); font-size: 15px; font-weight: 700; }
+    .property-price small { color: var(--muted); font-size: 9px; font-weight: 400; }
+    .property-link { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-size: 10px; font-weight: 600; }
+    .property-link svg { width: 14px; height: 14px; }
+    .properties-footer { display: flex; justify-content: center; margin-top: 34px; }
+
+    /* About */
+    .about { padding: 120px 0; }
+    .about-grid { display: grid; grid-template-columns: .95fr 1fr; align-items: center; gap: clamp(45px, 9vw, 120px); }
+    .about-visual { position: relative; min-height: 450px; }
+    .about-image { position: absolute; inset: 0 0 35px 48px; overflow: hidden; border-radius: 18px 155px 18px 18px; background: #dce2d8; }
+    .about-image img { height: 100%; object-fit: cover; }
+    .about-badge { position: absolute; bottom: 0; left: 0; width: 170px; padding: 20px; border-radius: 15px; color: white; background: var(--green); box-shadow: 0 15px 35px rgba(29,48,45,.17); }
+    .about-badge strong { display: block; font-family: "DM Sans", var(--sans); font-size: 31px; font-weight: 500; }
+    .about-badge span { display: block; margin-top: 4px; color: rgba(255,255,255,.73); font-size: 10px; }
+    .about-copy h2 { margin: 15px 0 17px; font-size: clamp(33px, 4vw, 47px); line-height: 1.35; letter-spacing: -.045em; font-weight: 600; }
+    .about-copy > p { margin: 0; color: var(--muted); font-size: 13px; line-height: 2.1; }
+    .about-points { display: grid; grid-template-columns: 1fr 1fr; gap: 17px 24px; margin: 28px 0 30px; }
+    .about-point { display: flex; align-items: center; gap: 9px; font-size: 11px; font-weight: 500; }
+    .check-icon { display: grid; place-items: center; width: 21px; height: 21px; border-radius: 50%; color: var(--green); background: #e2eade; }
+    .check-icon svg { width: 12px; height: 12px; }
+
+    /* Locations */
+    .locations { padding: 90px 0 100px; color: white; background: var(--green-dark); }
+    .locations .eyebrow { color: #d5e0d4; }
+    .locations .section-heading h2 { color: white; }
+    .locations .section-heading p { color: rgba(255,255,255,.62); }
+    .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .location-card { position: relative; display: flex; align-items: end; min-height: 280px; overflow: hidden; border-radius: var(--radius); background: #496458; }
+    .location-card::after { position: absolute; content: ""; inset: 0; background: linear-gradient(0deg, rgba(13,31,25,.75), rgba(13,31,25,.05) 75%); }
+    .location-card img { position: absolute; inset: 0; height: 100%; object-fit: cover; opacity: .77; transition: transform .7s ease; }
+    .location-card:hover img { transform: scale(1.04); }
+    .location-info { position: relative; z-index: 1; display: flex; align-items: end; justify-content: space-between; width: 100%; padding: 25px; }
+    .location-info small { color: rgba(255,255,255,.75); font-size: 10px; }
+    .location-info h3 { margin: 5px 0 0; font-size: 27px; font-weight: 500; }
+    .location-info a { display: grid; place-items: center; width: 41px; height: 41px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; transition: background .25s ease, color .25s ease; }
+    .location-info a:hover { color: var(--green); background: white; }
+    .location-info svg { width: 17px; height: 17px; }
+
+    /* Process and contact */
+    .process { padding: 110px 0; }
+    .process-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; }
+    .process-step { position: relative; padding-top: 22px; border-top: 1px solid var(--line); }
+    .process-step::before { position: absolute; top: -4px; right: 0; content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+    .process-step small { color: #9aa79e; font-family: "DM Sans", var(--sans); font-size: 11px; }
+    .process-step h3 { margin: 14px 0 8px; font-size: 15px; font-weight: 600; }
+    .process-step p { max-width: 235px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.9; }
+    .contact { padding: 0 0 100px; }
+    .contact-box { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 30px; overflow: hidden; padding: 55px 58px; border-radius: 24px; color: white; background: var(--green); }
+    .contact-box::after { position: absolute; content: ""; width: 330px; height: 330px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; top: -190px; left: 28%; box-shadow: 0 0 0 34px rgba(255,255,255,.035), 0 0 0 68px rgba(255,255,255,.025); }
+    .contact-box .eyebrow { position: relative; z-index: 1; color: #d7e1d6; }
+    .contact-box h2 { position: relative; z-index: 1; margin: 13px 0 9px; font-size: clamp(29px, 4vw, 42px); line-height: 1.35; font-weight: 500; }
+    .contact-box p { position: relative; z-index: 1; margin: 0; color: rgba(255,255,255,.7); font-size: 12px; }
+    .contact-box .button { position: relative; z-index: 1; flex: 0 0 auto; color: var(--green); background: white; }
+    .contact-box .button:hover { background: #f0eee6; }
+    .contact-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 11px; }
+    .contact-actions .button { min-height: 52px; }
+    .contact-actions .button svg { width: 18px; height: 18px; }
+    .contact-actions .button-whatsapp { border-color: rgba(255,255,255,.35); color: white; background: rgba(255,255,255,.08); }
+    .contact-actions .button-whatsapp:hover { border-color: rgba(255,255,255,.65); background: rgba(255,255,255,.15); }
+
+    /* Footer */
+    .site-footer { padding: 35px 0 20px; background: #efeee8; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 28px; }
+    .footer-description { max-width: 300px; margin: 10px 0 0; color: var(--muted); font-size: 10px; line-height: 1.8; }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: 23px; }
+    .footer-nav a { color: #64736c; font-size: 10px; transition: color .2s ease; }
+    .footer-nav a:hover { color: var(--green); }
+    .footer-contact { display: grid; justify-items: start; gap: 8px; }
+    .footer-contact a { display: inline-flex; align-items: center; gap: 7px; color: var(--green); font: 600 12px/1 "DM Sans", var(--sans); direction: ltr; }
+    .footer-contact a svg { width: 15px; height: 15px; }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 15px; padding-top: 18px; border-top: 1px solid var(--line); color: #839088; font-size: 9px; }
+
+    /* Motion and accessibility */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .08s; }
+    .reveal-delay-2 { transition-delay: .16s; }
+    .reveal-delay-3 { transition-delay: .24s; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes image-arrive { from { opacity: .5; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 980px) {
+      .nav-links { gap: 17px; }
+      .nav-links a { font-size: 11px; }
+      .nav-contact { display: none; }
+      .hero-grid { gap: 35px; }
+      .hero-visual { min-height: 440px; }
+      .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .service-featured { grid-column: span 2; grid-row: auto; min-height: 245px; }
+      .service-card, .services-cta { min-height: 215px; }
+      .property-image { height: 205px; }
+    }
+    @media (max-width: 720px) {
+      .container { width: min(100% - 36px, 540px); }
+      .site-header { height: 70px; }
+      .site-header.scrolled { height: 64px; }
+      .menu-toggle { display: flex; }
+      .nav-actions > .button { display: none; }
+      .nav-links {
+        position: fixed; inset: 70px 0 auto; display: flex; flex-direction: column; align-items: stretch;
+        gap: 0; max-height: 0; overflow: hidden; padding: 0 24px; background: var(--cream);
+        box-shadow: 0 12px 20px rgba(29,48,45,.08); transition: max-height .35s ease, padding .35s ease;
+      }
+      .site-header.menu-open .nav-links { max-height: 360px; padding-block: 10px 22px; }
+      .nav-links li { border-bottom: 1px solid var(--line); }
+      .nav-links li:last-child { border-bottom: 0; }
+      .nav-links a { display: block; padding: 13px 0; font-size: 13px; }
+      .hero { padding: 110px 0 60px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 38px; }
+      .hero-copy { max-width: 100%; }
+      .hero-copy h1 { max-width: 500px; font-size: clamp(43px, 12vw, 60px); }
+      .hero-copy > p { font-size: 13px; }
+      .hero-visual { min-height: min(112vw, 470px); }
+      .hero-image-wrap { inset-inline-start: 20px; border-radius: 155px 155px 16px 16px; }
+      .floating-card.one { right: 0; }
+      .floating-card.two { left: -5px; }
+      .hero-stats { margin-top: 32px; gap: 24px; }
+      .hero-stat strong { font-size: 21px; }
+      .trust-inner { align-items: start; flex-direction: column; }
+      .trust-list { width: 100%; justify-content: space-between; gap: 10px; }
+      .trust-list span { font-size: 10px; }
+      .services, .about, .process { padding: 75px 0; }
+      .section-heading { align-items: start; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+      .section-heading h2 { font-size: 34px; }
+      .section-heading p { font-size: 12px; }
+      .services .section-heading { margin-bottom: 25px; }
+      .services .section-heading h2 { font-size: 35px; }
+      .services-grid { grid-template-columns: 1fr; gap: 11px; }
+      .service-card, .services-cta { min-height: 190px; padding: 19px 18px 46px; }
+      .service-featured { grid-column: auto; grid-row: auto; min-height: 255px; padding: 22px 21px 45px; }
+      .service-featured::before { inset-inline-start: 14%; }
+      .service-featured::after { background: linear-gradient(0deg, rgba(15,38,31,.96), rgba(15,38,31,.6) 58%, rgba(15,38,31,.25)); }
+      .service-index { top: 23px; left: 19px; }
+      .service-featured .service-index { top: 23px; left: 20px; }
+      .service-icon { width: 51px; height: 51px; margin-bottom: 17px; }
+      .service-icon svg { width: 25px; height: 25px; }
+      .service-card h3 { font-size: 15px; }
+      .service-card p { font-size: 11px; }
+      .service-featured .service-icon { width: 55px; height: 55px; }
+      .service-featured p { max-width: 250px; }
+      .services-cta strong { max-width: 240px; }
+      .properties { padding: 75px 0; }
+      .property-grid { grid-template-columns: 1fr; gap: 15px; }
+      .property-image { height: 235px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-visual { min-height: 360px; }
+      .about-image { inset-inline-start: 35px; border-radius: 18px 130px 18px 18px; }
+      .about-badge { width: 145px; padding: 16px; }
+      .about-badge strong { font-size: 27px; }
+      .about-copy h2 { font-size: 35px; }
+      .locations { padding: 75px 0; }
+      .location-grid { grid-template-columns: 1fr; }
+      .location-card { min-height: 220px; }
+      .process-grid { grid-template-columns: 1fr 1fr; gap: 28px 16px; }
+      .contact { padding-bottom: 70px; }
+      .contact-box { align-items: start; flex-direction: column; padding: 35px 25px; }
+      .contact-box h2 { font-size: 31px; }
+      .footer-top { align-items: start; flex-direction: column; }
+      .footer-nav { gap: 15px; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (max-width: 380px) {
+      .container { width: calc(100% - 28px); }
+      .hero-cta { align-items: stretch; flex-direction: column; }
+      .hero-cta .button { width: 100%; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card, .services-cta { min-height: 185px; }
+      .about-points { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" aria-label="سندك ويمناك، الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 22.5 24 10l16 12.5" stroke="#E3C58A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 21.5V34h21V21.5M20 34v-8h8v8" stroke="#F7F5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 39c4.5-4 8.3-4.3 12.1-.6 2 2 4.1 3 6.5 2.7 3.1-.3 5.6-2.1 9.4-5.3" stroke="#E3C58A" stroke-width="2.1" stroke-linecap="round"/><path d="m34.1 35.8 3.4-.2-.4 3.3" stroke="#E3C58A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="brand-name">سندك ويمناك<small>REAL ESTATE · JEDDAH & MADINAH</small></span>
+      </a>
+      <nav aria-label="التنقل الرئيسي">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#home">الرئيسية</a></li>
+          <li><a href="#services">خدماتنا</a></li>
+          <li><a href="#properties">عقارات مميزة</a></li>
+          <li><a href="#about">من نحن</a></li>
+          <li><a href="#locations">مناطقنا</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a class="nav-contact" href="tel:+966563055124" aria-label="اتصل بنا على 056 305 5124"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7.2 3.8h3l1.5 4-2 1.8a15 15 0 0 0 4.7 4.7l1.8-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z"/></svg><span dir="ltr">056 305 5124</span></a>
+        <a class="button button-dark" href="#contact">اطلب استشارة <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="فتح القائمة" aria-expanded="false" aria-controls="nav-links">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">عقارك القادم يبدأ من هنا</span>
+          <h1>نكون <span>سندك</span><br>و<em>يمناك</em> في كل خطوة.</h1>
+          <p>من أول فكرة إلى مفتاح بيتك — خبرة محلية وعناية شخصية تساعدك تختار العقار الصح، وتستثمر بثقة في جدة والمدينة المنورة.</p>
+          <div class="hero-cta">
+            <a class="button button-dark" href="#properties">اكتشف عقاراتنا <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="button button-light" href="#services">تعرّف على خدماتنا</a>
+          </div>
+          <div class="hero-note">
+            <div class="avatar-stack" aria-hidden="true"><span>س</span><span>و</span><span>ع</span></div>
+            <p><strong>علاقة تبدأ بالثقة</strong><br>ونبنيها معك على المدى الطويل</p>
+          </div>
+          <div class="hero-stats" aria-label="خدماتنا ومناطقنا">
+            <div class="hero-stat"><strong>8+</strong><span>خدمات عقارية</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><strong>2</strong><span>مدينتان بخدمتك</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><strong>360°</strong><span>رحلة عقارية متكاملة</span></div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="فيلا عصرية في جدة">
+          <div class="hero-image-wrap">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&amp;fit=crop&amp;w=1100&amp;q=85" alt="واجهة منزل عصري محاط بالنباتات" fetchpriority="high">
+            <div class="image-caption"><small>بيت يشبه تطلعاتك</small><strong>تفاصيل تصنع الفرق</strong><span>✦</span></div>
+          </div>
+          <div class="floating-card one">
+            <span class="float-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9 20v-6h6v6"/></svg></span>
+            <span><small>استثمار واعد</small><strong>اختيارات مدروسة</strong></span>
+          </div>
+          <div class="floating-card two">
+            <span class="float-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg></span>
+            <span><small>نغطي منطقتك</small><strong>جدة & المدينة</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="container trust-inner">
+        <span>شريكك في كل قرار عقاري</span>
+        <div class="trust-list"><span>وضوح</span><span>خبرة</span><span>اهتمام</span><span>ثقة</span></div>
+      </div>
+    </div>
+
+    <section class="services" id="services">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div><span class="eyebrow">خدماتنا العقارية</span><h2>كل اللي تحتاجه،<br>تحت سقف واحد.</h2></div>
+          <p>سواء كنت تبحث عن بيت العمر أو فرصة استثمارية، فريقنا معك بخدمات متكاملة وخبرة تعرف تفاصيل السوق المحلي.</p>
+        </div>
+        <div class="services-grid">
+          <article class="service-card service-featured reveal">
+            <span class="service-index">01 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="m4.5 14 11.5-9 11.5 9"/><path d="M7.5 12.5V27h17V12.5M13 27v-8h6v8"/><path d="M11 15h3v3h-3zM18 15h3v3h-3z"/></svg></span>
+            <h3>البيع والشراء</h3><p>نساعدك تبيع بأفضل قيمة أو تلاقي عقارك المناسب بكل وضوح وراحة بال.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal reveal-delay-1">
+            <span class="service-index">02 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M5.5 27h21M8 27V8.5L16 4l8 4.5V27M12 12h2M18 12h2M12 17h2M18 17h2"/><path d="M13.5 27v-5h5v5M22.5 10.5h4v11h-4"/></svg></span>
+            <h3>التأجير</h3><p>نربط المالك بالمستأجر المناسب ونتابع تفاصيل التأجير من البداية للنهاية.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal reveal-delay-2">
+            <span class="service-index">03 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M5 26.5V5.5M5 26.5h22"/><path d="M9 22v-6h5v6M17 22V10h5v12"/><path d="m8 12 6-4 4 2 7-6M21 4h4v4"/></svg></span>
+            <h3>الاستثمار العقاري</h3><p>فرص مختارة ودراسة تساعدك تستثمر بوعي وتبني عوائد تناسب أهدافك.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal reveal-delay-3">
+            <span class="service-index">04 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M5 27h22M7.5 27V9.5L16 5l8.5 4.5V27M12 13h2M18 13h2M12 18h2M18 18h2M13.5 27v-5h5v5"/><path d="m20.5 8 2-2"/></svg></span>
+            <h3>إدارة الأملاك</h3><p>إدارة ومتابعة لعقارك تشمل المستأجرين، العقود، والتحصيل والصيانة.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal">
+            <span class="service-index">05 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M7 24.5 21.5 10l4.5 4.5L11.5 29H7zM18.5 13l4.5 4.5"/><path d="M5 7.5h8M5 12h4M5 16.5h3M21 5v2M27 8l-1.5 1.5M28 14h-2"/><circle cx="23.5" cy="7" r="4.5"/></svg></span>
+            <h3>التقييم العقاري</h3><p>قراءة واقعية للسوق تساعدك تعرف قيمة عقارك وتتخذ قرارك بثقة.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal reveal-delay-1">
+            <span class="service-index">06 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M5 14v5h5l13 6V8l-13 6zM23 12h3a3 3 0 0 1 0 9h-3M8 20l2 7h5l-3.5-5.4M6 14l-2-3M27 10l2-2M28 23l2 2"/></svg></span>
+            <h3>التسويق العقاري</h3><p>نعرض عقارك باحتراف ونوصل له للعملاء المناسبين عبر قنوات فعّالة.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal reveal-delay-2">
+            <span class="service-index">07 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M5 27h22M7 27V8l9-4 9 4v19M12 12h2M18 12h2M12 17h2M18 17h2M13 27v-6h6v6"/><path d="M4 6V4h4M28 6V4h-4M4 26v2h4M28 26v2h-4"/></svg></span>
+            <h3>التطوير العقاري</h3><p>نرافق مشاريعك من الفكرة والتخطيط إلى التنفيذ وتحقيق قيمة مستدامة.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="service-card reveal reveal-delay-3">
+            <span class="service-index">08 / 08</span>
+            <span class="service-icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.55" aria-hidden="true"><path d="M6 14a10 10 0 0 1 20 0v5a3 3 0 0 1-3 3h-2M6 16H5a3 3 0 0 0 0 6h2v-8M26 16h1a3 3 0 0 1 0 6h-3"/><path d="M21 22v2.5a3 3 0 0 1-3 3h-3"/><path d="M12 11h8l3 3-3 3h-8l-3-3zM13 14h.01M16 14h.01M19 14h.01"/></svg></span>
+            <h3>الاستشارات العقارية</h3><p>رأي مهني يساعدك تختار المنطقة والعقار والتوقيت الأنسب لخطوتك.</p>
+            <span class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="services-cta reveal">
+            <small>مو عارف تبدأ من فين؟</small>
+            <strong>خلّنا نساعدك تختار خطوتك الجاية.</strong>
+            <a href="#contact">تحدث مع مستشار <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="properties" id="properties">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div><span class="eyebrow">اختيارات تستحق الاكتشاف</span><h2>عقارات مميزة<br>نرشحها لك.</h2></div>
+          <p>أمثلة توضيحية لتصميم بطاقات العقارات. تُستبدل بالعقارات المتاحة وأسعارها الفعلية قبل النشر.</p>
+        </div>
+        <div class="property-grid">
+          <article class="property-card reveal">
+            <div class="property-image">
+              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="فيلا واسعة بتصميم عصري" loading="lazy">
+              <span class="property-tag">للبيع</span>
+              <button class="property-favorite" type="button" data-property="فيلا الروضة" aria-label="أضف فيلا الروضة إلى المفضلة" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 8.7c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z"/></svg></button>
+            </div>
+            <div class="property-body">
+              <div class="property-location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> جدة، حي الروضة</div>
+              <h3>فيلا عصرية بإضاءة طبيعية</h3>
+              <div class="property-specs"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11V5h6M21 13v6h-6M3 5l7 7m11 7-7-7"/></svg> ٣٢٠ م²</span><span>٤ غرف نوم</span><span>٥ حمامات</span></div>
+              <div class="property-bottom"><span class="property-price">٢٬٨٥٠٬٠٠٠ <small>ر.س</small></span><a class="property-link" href="#contact">التفاصيل <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+            </div>
+          </article>
+          <article class="property-card reveal reveal-delay-1">
+            <div class="property-image">
+              <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="منزل أنيق بحديقة خضراء" loading="lazy">
+              <span class="property-tag">للبيع</span>
+              <button class="property-favorite" type="button" data-property="منزل النرجس" aria-label="أضف منزل النرجس إلى المفضلة" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 8.7c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z"/></svg></button>
+            </div>
+            <div class="property-body">
+              <div class="property-location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> المدينة المنورة، حي العريض</div>
+              <h3>منزل عائلي بحديقة خاصة</h3>
+              <div class="property-specs"><span>٢٨٠ م²</span><span>٤ غرف نوم</span><span>٤ حمامات</span></div>
+              <div class="property-bottom"><span class="property-price">١٬٧٥٠٬٠٠٠ <small>ر.س</small></span><a class="property-link" href="#contact">التفاصيل <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+            </div>
+          </article>
+          <article class="property-card reveal reveal-delay-2">
+            <div class="property-image">
+              <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="شقة فاخرة بتصميم داخلي هادئ" loading="lazy">
+              <span class="property-tag">للإيجار</span>
+              <button class="property-favorite" type="button" data-property="شقة الشاطئ" aria-label="أضف شقة الشاطئ إلى المفضلة" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 8.7c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z"/></svg></button>
+            </div>
+            <div class="property-body">
+              <div class="property-location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> جدة، حي الشاطئ</div>
+              <h3>شقة راقية بإطلالة مفتوحة</h3>
+              <div class="property-specs"><span>١٨٠ م²</span><span>٣ غرف نوم</span><span>٣ حمامات</span></div>
+              <div class="property-bottom"><span class="property-price">١٢٠٬٠٠٠ <small>ر.س / سنوي</small></span><a class="property-link" href="#contact">التفاصيل <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+            </div>
+          </article>
+        </div>
+        <div class="properties-footer"><a class="button button-light" href="#contact">اطلب عقارك المناسب <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container about-grid">
+        <div class="about-visual reveal">
+          <div class="about-image"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&amp;fit=crop&amp;w=1000&amp;q=85" alt="تصميم داخلي مريح لمنزل عصري" loading="lazy"></div>
+          <div class="about-badge"><strong>٣٦٠°</strong><span>معك من أول فكرة حتى استلام المفتاح</span></div>
+        </div>
+        <div class="about-copy reveal reveal-delay-1">
+          <span class="eyebrow">أكثر من مجرد عقار</span>
+          <h2>نبني علاقة تدوم<br>قبل ما نبني صفقة.</h2>
+          <p>سندك ويمناك شركة عقارية سعودية متخصصة في جدة والمدينة المنورة. نؤمن إن القرار العقاري قرار كبير، لذلك نسمع لك، نفهم احتياجك، ونمشي معك خطوة بخطوة بكل شفافية.</p>
+          <div class="about-points">
+            <div class="about-point"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>معرفة عميقة بالسوق المحلي</div>
+            <div class="about-point"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>وضوح في كل التفاصيل</div>
+            <div class="about-point"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>خدمة شخصية على مقاسك</div>
+            <div class="about-point"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>متابعة حتى بعد التسليم</div>
+          </div>
+          <a class="button button-dark" href="#contact">خلّنا نبدأ سوا <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="locations" id="locations">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div><span class="eyebrow">قريبين منك</span><h2>مدينتان، وخبرة<br>تعرف تفاصيلهما.</h2></div>
+          <p>من أحياء جدة النابضة بالحياة إلى هدوء المدينة المنورة — نعرف السوق ونساعدك تلقى المكان اللي يناسبك.</p>
+        </div>
+        <div class="location-grid">
+          <article class="location-card reveal">
+            <img src="https://images.unsplash.com/photo-1578895101408-1a36b834405b?auto=format&amp;fit=crop&amp;w=1100&amp;q=80" alt="مشهد عمراني في مدينة جدة" loading="lazy">
+            <div class="location-info"><div><small>ساحل البحر الأحمر</small><h3>جدة</h3></div><a href="#contact" aria-label="استكشف عقارات جدة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+          </article>
+          <article class="location-card reveal reveal-delay-1">
+            <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&amp;fit=crop&amp;w=1100&amp;q=80" alt="معلم معماري في المدينة المنورة" loading="lazy">
+            <div class="location-info"><div><small>طيبة الطيبة</small><h3>المدينة المنورة</h3></div><a href="#contact" aria-label="استكشف عقارات المدينة المنورة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="process">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div><span class="eyebrow">خطوات بسيطة، قرار مطمئن</span><h2>من أول حديث،<br>لين تستقر.</h2></div>
+          <p>خلّينا نسهّل عليك المشوار — خطوات واضحة، وفريق حاضر في كل مرحلة.</p>
+        </div>
+        <div class="process-grid">
+          <article class="process-step reveal"><small>01 / نتعرّف عليك</small><h3>نسمع احتياجك</h3><p>نبدأ بحوار بسيط نفهم فيه أهدافك وميزانيتك وتفضيلاتك.</p></article>
+          <article class="process-step reveal reveal-delay-1"><small>02 / نبحث لك</small><h3>نرشّح الأنسب</h3><p>نجهز لك خيارات مدروسة تتناسب مع احتياجك في الوقت والمكان الصح.</p></article>
+          <article class="process-step reveal reveal-delay-2"><small>03 / نرتّب التفاصيل</small><h3>نرافقك بالخطوات</h3><p>من الزيارة والتفاوض إلى العقود، نكون معك ونوضّح لك كل تفصيلة.</p></article>
+          <article class="process-step reveal reveal-delay-3"><small>04 / نتابع معك</small><h3>علاقتنا تستمر</h3><p>بعد ما يتم الاتفاق، نتابع معك ونبقى قريبين من احتياجاتك القادمة.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact-box reveal">
+          <div><span class="eyebrow">تواصل معنا مباشرة</span><h2>جاهز تلاقي عقارك؟<br>إحنا سندك.</h2><p>اتصل علينا أو راسلنا على واتساب، وفريقنا يساعدك في خطوتك القادمة.</p></div>
+          <div class="contact-actions">
+            <a class="button" href="tel:+966563055124"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7.2 3.8h3l1.5 4-2 1.8a15 15 0 0 0 4.7 4.7l1.8-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z"/></svg><span dir="ltr">056 305 5124</span></a>
+            <a class="button button-whatsapp" href="https://wa.me/966563055124" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4.1A8 8 0 1 1 20 11.6Z"/><path d="M9 8.5c.3-.5.6-.5.9-.5l.6 1.5c.1.3.1.5-.1.7l-.5.6a6 6 0 0 0 2.8 2.8l.6-.5c.2-.2.5-.2.7-.1l1.5.6c.3.1.3.6.1.9-.3.6-.9 1-1.6 1-1.7 0-5.5-3.1-5.5-5.5 0-.7.4-1.2.5-1.5Z"/></svg>واتساب</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a class="brand" href="#home">
+            <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 22.5 24 10l16 12.5" stroke="#E3C58A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 21.5V34h21V21.5M20 34v-8h8v8" stroke="#F7F5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 39c4.5-4 8.3-4.3 12.1-.6 2 2 4.1 3 6.5 2.7 3.1-.3 5.6-2.1 9.4-5.3" stroke="#E3C58A" stroke-width="2.1" stroke-linecap="round"/><path d="m34.1 35.8 3.4-.2-.4 3.3" stroke="#E3C58A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="brand-name">سندك ويمناك<small>REAL ESTATE · JEDDAH & MADINAH</small></span>
+          </a>
+          <p class="footer-description">شريكك العقاري في جدة والمدينة المنورة. نكون سندك في كل قرار، ويمناك في كل خطوة.</p>
+        </div>
+        <nav class="footer-nav" aria-label="روابط التذييل">
+          <a href="#services">خدماتنا</a><a href="#properties">العقارات</a><a href="#about">من نحن</a><a href="#locations">مناطقنا</a><a href="#contact">تواصل معنا</a>
+        </nav>
+        <div class="footer-contact">
+          <a href="tel:+966563055124" aria-label="اتصل بنا"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7.2 3.8h3l1.5 4-2 1.8a15 15 0 0 0 4.7 4.7l1.8-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z"/></svg><span>056 305 5124</span></a>
+          <a href="https://wa.me/966563055124" target="_blank" rel="noopener noreferrer" aria-label="تواصل معنا عبر واتساب"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4.1A8 8 0 1 1 20 11.6Z"/><path d="M9 8.5c.3-.5.6-.5.9-.5l.6 1.5c.1.3.1.5-.1.7l-.5.6a6 6 0 0 0 2.8 2.8l.6-.5c.2-.2.5-.2.7-.1l1.5.6c.3.1.3.6.1.9-.3.6-.9 1-1.6 1-1.7 0-5.5-3.1-5.5-5.5 0-.7.4-1.2.5-1.5Z"/></svg><span>واتساب</span></a>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="current-year">2026</span> سندك ويمناك. جميع الحقوق محفوظة.</span><span>جدة · المدينة المنورة · المملكة العربية السعودية</span></div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.querySelector("#site-header");
+    const menuToggle = document.querySelector("#menu-toggle");
+    const navLinks = document.querySelectorAll(".nav-links a");
+
+    const updateHeader = () => header.classList.toggle("scrolled", window.scrollY > 24);
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    updateHeader();
+
+    const closeMenu = () => {
+      header.classList.remove("menu-open");
+      document.body.classList.remove("menu-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "فتح القائمة");
+    };
+    menuToggle.addEventListener("click", () => {
+      const isOpen = header.classList.toggle("menu-open");
+      document.body.classList.toggle("menu-open", isOpen);
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "إغلاق القائمة" : "فتح القائمة");
+    });
+    navLinks.forEach(link => link.addEventListener("click", closeMenu));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMenu();
+    });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach(element => revealObserver.observe(element));
+
+    const sections = document.querySelectorAll("main section[id]");
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`));
+      });
+    }, { rootMargin: "-35% 0px -55% 0px" });
+    sections.forEach(section => sectionObserver.observe(section));
+
+    document.querySelectorAll(".property-favorite").forEach(button => {
+      button.addEventListener("click", () => {
+        const saved = button.classList.toggle("saved");
+        button.setAttribute("aria-pressed", String(saved));
+        button.setAttribute("aria-label", `${saved ? "إزالة" : "أضف"} ${button.dataset.property} ${saved ? "من" : "إلى"} المفضلة`);
+      });
+    });
+    document.querySelector("#current-year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
