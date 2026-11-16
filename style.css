@@ -78,8 +78,19 @@
     .brand-name { display: grid; gap: 1px; font-weight: 700; font-size: 16px; line-height: 1.25; }
     .brand-name small { color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: .09em; }
     .nav-links { display: flex; align-items: center; gap: clamp(18px, 3vw, 38px); margin: 0; padding: 0; list-style: none; }
-    .nav-links a { color: #53645d; font-size: 14px; transition: color .2s ease; }
-    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    .nav-links a {
+      position: relative; display: inline-block; padding-block: 9px;
+      color: #263f38; font-size: 15px; font-weight: 600;
+      transition: color .25s ease, transform .25s ease;
+    }
+    .nav-links a::after {
+      position: absolute; content: ""; right: 0; bottom: 2px; width: 100%; height: 2px;
+      border-radius: 2px; background: var(--gold); transform: scaleX(0); transform-origin: right;
+      transition: transform .3s cubic-bezier(.2,.8,.2,1);
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--green-dark); }
+    .nav-links a:hover { transform: translateY(-2px); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
     .nav-actions { display: flex; align-items: center; gap: 14px; }
     .nav-contact { display: inline-flex; align-items: center; gap: 8px; font: 600 14px/1 "DM Sans", var(--sans); direction: ltr; transition: color .2s ease; }
     .nav-contact:hover { color: var(--green); }
@@ -96,9 +107,16 @@
     .hero::before {
       position: absolute; content: ""; width: 510px; height: 510px; border-radius: 50%;
       background: #e8ebdf; top: -290px; inset-inline-start: -200px; filter: blur(2px);
+      animation: ambient-drift 16s ease-in-out infinite alternate;
+    }
+    .hero::after {
+      position: absolute; content: ""; width: 360px; height: 360px; border: 1px solid rgba(201,156,89,.2);
+      border-radius: 50%; top: 20%; inset-inline-end: -275px;
+      box-shadow: 0 0 0 24px rgba(201,156,89,.035), 0 0 0 52px rgba(201,156,89,.025);
+      pointer-events: none; animation: orbit-drift 22s ease-in-out infinite alternate;
     }
     .hero-grid { position: relative; display: grid; grid-template-columns: 1fr 1.02fr; align-items: center; gap: clamp(45px, 8vw, 110px); }
-    .hero-copy { max-width: 500px; }
+    .hero-copy { max-width: 500px; animation: copy-arrive .9s .12s both cubic-bezier(.2,.8,.2,1); }
     .hero-copy h1 { margin: 19px 0 20px; font-size: clamp(43px, 6vw, 72px); line-height: 1.2; letter-spacing: -.06em; font-weight: 600; }
     .hero-copy h1 span { color: var(--green); }
     .hero-copy > p { max-width: 455px; margin: 0; color: var(--muted); font-size: 17px; line-height: 2; }
@@ -118,12 +136,14 @@
     .hero-image-wrap {
       position: absolute; inset: 0 30px 0 0; overflow: hidden;
       border-radius: 190px 190px 18px 18px; background: #d5ddd1;
+      animation: frame-arrive 1.1s .08s both cubic-bezier(.2,.8,.2,1);
     }
     .hero-image-wrap::after {
       position: absolute; content: ""; inset: 0;
       background: linear-gradient(180deg, transparent 53%, rgba(14, 33, 27, .38));
     }
-    .hero-image-wrap img { height: 100%; object-fit: cover; object-position: center; animation: image-arrive 1.2s cubic-bezier(.2,.8,.2,1) both; }
+    .hero-image-wrap img { height: 100%; object-fit: cover; object-position: center; animation: image-arrive 1.8s .15s cubic-bezier(.2,.8,.2,1); transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+    .hero-visual:hover .hero-image-wrap img { transform: scale(1.045); }
     .image-caption { position: absolute; z-index: 1; bottom: 25px; right: 27px; color: white; }
     .image-caption small { display: block; margin-bottom: 5px; opacity: .8; font-size: 10px; }
     .image-caption strong { font-size: 17px; font-weight: 500; }
@@ -132,7 +152,7 @@
       position: absolute; z-index: 2; display: flex; align-items: center; gap: 12px;
       padding: 14px 17px; border: 1px solid rgba(255,255,255,.7); border-radius: 15px;
       background: rgba(255,254,250,.94); box-shadow: 0 16px 42px rgba(27,48,42,.12);
-      animation: float 5s ease-in-out infinite;
+      animation: float 5s ease-in-out infinite, card-arrive .8s .65s both cubic-bezier(.2,.8,.2,1);
     }
     .floating-card.one { top: 105px; right: -8px; }
     .floating-card.two { bottom: 48px; left: -28px; animation-delay: -2.2s; }
@@ -267,7 +287,7 @@
     .property-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(29,48,45,.1); }
     .property-image { position: relative; height: 245px; overflow: hidden; background: #dce2d8; }
     .property-image img { height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
-    .property-card:hover .property-image img { transform: scale(1.055); }
+    .property-card:hover .property-image img { transform: scale(1.07); }
     .property-tag { position: absolute; top: 15px; right: 15px; padding: 7px 12px; border-radius: 99px; color: var(--green); background: rgba(255,254,250,.94); font-size: 12px; font-weight: 600; }
     .property-favorite { position: absolute; top: 13px; left: 13px; display: grid; place-items: center; width: 35px; height: 35px; border: 0; border-radius: 50%; color: var(--ink); background: rgba(255,254,250,.92); cursor: pointer; transition: color .2s ease, transform .2s ease; }
     .property-favorite:hover { color: #bd6258; transform: scale(1.08); }
@@ -355,21 +375,26 @@
     .footer-bottom { display: flex; justify-content: space-between; gap: 15px; padding-top: 18px; border-top: 1px solid var(--line); color: #839088; font-size: 11px; }
 
     /* Motion and accessibility */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
-    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal { opacity: 0; filter: blur(7px); transform: translateY(34px) scale(.985); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1), filter .8s ease; }
+    .reveal.is-visible { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
     .reveal-delay-1 { transition-delay: .08s; }
     .reveal-delay-2 { transition-delay: .16s; }
     .reveal-delay-3 { transition-delay: .24s; }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @keyframes image-arrive { from { opacity: .5; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
+    @keyframes image-arrive { from { opacity: .5; transform: scale(1.12); } to { opacity: 1; transform: scale(1); } }
+    @keyframes frame-arrive { from { clip-path: inset(14% 0 14% 0 round 190px 190px 18px 18px); opacity: .55; } to { clip-path: inset(0 0 0 0 round 190px 190px 18px 18px); opacity: 1; } }
+    @keyframes copy-arrive { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes card-arrive { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
+    @keyframes ambient-drift { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(34px,22px,0) scale(1.08); } }
+    @keyframes orbit-drift { from { transform: translate3d(0,0,0) rotate(0); } to { transform: translate3d(-24px,26px,0) rotate(18deg); } }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-      .reveal { opacity: 1; transform: none; }
+      .reveal, .reveal.is-visible { opacity: 1 !important; filter: none !important; transform: none !important; }
     }
 
     @media (max-width: 980px) {
       .nav-links { gap: 17px; }
-      .nav-links a { font-size: 13px; }
+      .nav-links a { font-size: 14px; }
       .nav-contact { display: none; }
       .hero-grid { gap: 35px; }
       .hero-visual { min-height: 440px; }
@@ -392,7 +417,7 @@
       .site-header.menu-open .nav-links { max-height: 360px; padding-block: 10px 22px; }
       .nav-links li { border-bottom: 1px solid var(--line); }
       .nav-links li:last-child { border-bottom: 0; }
-      .nav-links a { display: block; padding: 13px 0; font-size: 15px; }
+      .nav-links a { display: block; padding: 13px 0; font-size: 16px; }
       .hero { padding: 110px 0 60px; }
       .hero-grid { grid-template-columns: 1fr; gap: 38px; }
       .hero-copy { max-width: 100%; }
