@@ -8,362 +8,377 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --green: #21483e; --green-dark: #18372f; --gold: #c99c59;
-      --cream: #f7f5ef; --paper: #fffefa; --ink: #1d302d;
-      --muted: #71817a; --line: rgba(29,48,45,.12);
-      --red: #c0392b; --sans: "IBM Plex Sans Arabic","DM Sans",sans-serif;
-      --radius: 14px;
+      --green:#21483e;--green-dark:#18372f;--gold:#c99c59;
+      --cream:#f7f5ef;--paper:#fffefa;--ink:#1d302d;
+      --muted:#71817a;--line:rgba(29,48,45,.12);--red:#c0392b;
+      --sans:"IBM Plex Sans Arabic","DM Sans",sans-serif;--r:12px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--sans); background: #efeee8; color: var(--ink); -webkit-font-smoothing: antialiased; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--sans);background:#efeee8;color:var(--ink);-webkit-font-smoothing:antialiased}
 
-    /* Login */
-    #login-screen {
-      display: none; align-items: center; justify-content: center;
-      min-height: 100vh; background: var(--green-dark);
-    }
-    .login-box {
-      width: min(380px, calc(100% - 40px)); padding: 40px;
-      background: var(--paper); border-radius: 20px;
-      box-shadow: 0 30px 60px rgba(0,0,0,.25);
-    }
-    .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
-    .login-logo span { font-size: 20px; font-weight: 700; color: var(--green); }
-    .login-logo small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
-    .login-box h2 { font-size: 22px; margin-bottom: 6px; }
-    .login-box p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
-    .field { margin-bottom: 16px; }
-    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; }
-    .field input {
-      width: 100%; padding: 11px 14px; border: 1px solid var(--line);
-      border-radius: 10px; font: inherit; font-size: 14px;
-      background: var(--cream); transition: border-color .2s;
-    }
-    .field input:focus { outline: none; border-color: var(--green); }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 11px 22px; border: none; border-radius: 99px;
-      font: 600 14px var(--sans); cursor: pointer; transition: all .2s;
-    }
-    .btn-primary { background: var(--green); color: white; width: 100%; min-height: 46px; font-size: 15px; }
-    .btn-primary:hover { background: var(--green-dark); }
-    .btn-danger { background: #fdf0ef; color: var(--red); border: 1px solid #f5c6c3; }
-    .btn-danger:hover { background: #fce4e2; }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
-    .btn-ghost:hover { border-color: var(--green); color: var(--green); }
-    .btn-gold { background: var(--gold); color: white; }
-    .btn-gold:hover { background: #b8893e; }
-    #login-error { display: none; color: var(--red); font-size: 13px; margin-top: 10px; text-align: center; }
+    /* ── Token setup ── */
+    #setup-screen{display:none;align-items:center;justify-content:center;min-height:100vh;background:var(--green-dark)}
+    .setup-box{width:min(400px,calc(100% - 40px));padding:40px;background:var(--paper);border-radius:20px;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+    .setup-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+    .setup-logo b{font-size:19px;color:var(--green)}
+    .setup-logo small{display:block;font-size:11px;color:var(--muted);font-weight:400}
 
-    /* App */
-    #app { display: none; min-height: 100vh; }
-    .topbar {
-      position: sticky; top: 0; z-index: 10;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 28px; height: 64px;
-      background: rgba(255,254,250,.95); backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--line);
-    }
-    .topbar-brand { font-size: 16px; font-weight: 700; color: var(--green); }
-    .topbar-brand small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
-    .topbar-actions { display: flex; gap: 10px; align-items: center; }
-    .save-status { font-size: 12px; color: var(--muted); }
-    .save-status.saving { color: var(--gold); }
-    .save-status.saved { color: #2e7d52; }
-    .save-status.error { color: var(--red); }
+    /* ── App ── */
+    #app{display:none;min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;background:rgba(255,254,250,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .topbar-brand{font-size:15px;font-weight:700;color:var(--green)}
+    .topbar-brand small{display:block;font-size:10px;color:var(--muted);font-weight:400}
+    .topbar-right{display:flex;align-items:center;gap:10px}
+    #save-status{font-size:12px;color:var(--muted)}
+    #save-status.saving{color:var(--gold)}
+    #save-status.saved{color:#2e7d52}
+    #save-status.error{color:var(--red)}
 
-    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 64px); }
-    .sidebar {
-      padding: 24px 16px; background: var(--paper);
-      border-left: 1px solid var(--line);
-    }
-    .nav-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .08em; padding: 0 10px; margin-bottom: 8px; margin-top: 20px; }
-    .nav-label:first-child { margin-top: 0; }
-    .nav-item {
-      display: flex; align-items: center; gap: 10px; width: 100%;
-      padding: 10px 12px; border: none; border-radius: 10px;
-      font: 500 14px var(--sans); color: var(--ink); background: transparent;
-      cursor: pointer; transition: all .18s; text-align: right;
-    }
-    .nav-item:hover { background: var(--cream); }
-    .nav-item.active { background: #e4ede9; color: var(--green); font-weight: 600; }
-    .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 62px)}
+    .sidebar{background:var(--paper);border-left:1px solid var(--line);padding:20px 14px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto}
+    .nav-section{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;padding:0 10px;margin:18px 0 6px}
+    .nav-section:first-child{margin-top:0}
+    .nav-btn{display:flex;align-items:center;gap:9px;width:100%;padding:9px 11px;border:none;border-radius:9px;font:500 13px var(--sans);color:var(--ink);background:transparent;cursor:pointer;transition:all .18s;text-align:right}
+    .nav-btn:hover{background:var(--cream)}
+    .nav-btn.active{background:#e4ede9;color:var(--green);font-weight:600}
+    .nav-btn svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor}
 
-    .content { padding: 32px 36px; overflow-y: auto; }
-    .page { display: none; }
-    .page.active { display: block; }
+    .content{padding:28px 32px;overflow-y:auto}
+    .page{display:none}
+    .page.active{display:block}
+    .ph{margin-bottom:24px}
+    .ph h1{font-size:22px;font-weight:700}
+    .ph p{color:var(--muted);font-size:13px;margin-top:4px}
 
-    .page-header { margin-bottom: 28px; }
-    .page-header h1 { font-size: 24px; font-weight: 700; }
-    .page-header p { color: var(--muted); font-size: 14px; margin-top: 5px; }
+    /* ── Cards ── */
+    .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:18px}
+    .card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .card-hd h3{font-size:15px;font-weight:600}
 
-    /* Cards */
-    .card {
-      background: var(--paper); border: 1px solid var(--line);
-      border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
-    }
-    .card-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
-    }
-    .card-header h3 { font-size: 16px; font-weight: 600; }
+    /* ── Form ── */
+    .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+    .fg label{font-size:12px;font-weight:600;color:#405048}
+    .fg input,.fg select,.fg textarea{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--cream);transition:border-color .2s;width:100%}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--green)}
+    .fg textarea{resize:vertical;min-height:72px}
+    .fg .hint{font-size:11px;color:var(--muted)}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .span2{grid-column:1/-1}
 
-    /* Form */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .form-full { grid-column: 1 / -1; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label { font-size: 13px; font-weight: 600; }
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 10px 13px; border: 1px solid var(--line);
-      border-radius: 9px; font: inherit; font-size: 14px;
-      background: var(--cream); transition: border-color .2s;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none; border-color: var(--green);
-    }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-hint { font-size: 11px; color: var(--muted); }
+    /* ── Buttons ── */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border:none;border-radius:99px;font:600 13px var(--sans);cursor:pointer;transition:all .2s}
+    .btn svg{width:14px;height:14px;stroke:currentColor;fill:none}
+    .btn-primary{background:var(--green);color:#fff}
+    .btn-primary:hover{background:var(--green-dark)}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+    .btn-gold{background:var(--gold);color:#fff}
+    .btn-gold:hover{background:#b8893e}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+    .btn-ghost:hover{border-color:var(--green);color:var(--green)}
+    .btn-danger{background:#fdf0ef;color:var(--red);border:1px solid #f5c6c3}
+    .btn-danger:hover{background:#fce4e2}
+    .btn-sm{padding:6px 13px;font-size:12px;border-radius:8px}
 
-    /* Property cards */
-    .prop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .prop-card {
-      background: var(--paper); border: 1px solid var(--line);
-      border-radius: var(--radius); overflow: hidden; position: relative;
-      transition: box-shadow .2s;
-    }
-    .prop-card:hover { box-shadow: 0 8px 24px rgba(29,48,45,.1); }
-    .prop-card-img {
-      height: 160px; background: #dce2d8; overflow: hidden;
-    }
-    .prop-card-img img { width: 100%; height: 100%; object-fit: cover; }
-    .prop-card-body { padding: 14px 16px; }
-    .prop-card-tag {
-      display: inline-block; padding: 3px 10px; border-radius: 99px;
-      font-size: 11px; font-weight: 600; margin-bottom: 8px;
-      background: #e4ede9; color: var(--green);
-    }
-    .prop-card-tag.rent { background: #fff3e0; color: #b8600a; }
-    .prop-card-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .prop-card-body small { color: var(--muted); font-size: 12px; }
-    .prop-card-price { font-size: 16px; font-weight: 700; color: var(--green); margin-top: 10px; }
-    .prop-card-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
-    .prop-card-actions .btn { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
-    .add-prop-btn {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      border: 2px dashed var(--line); border-radius: var(--radius);
-      padding: 32px; cursor: pointer; color: var(--muted); font-size: 14px;
-      font-weight: 500; background: transparent; width: 100%; transition: all .2s;
-      font-family: var(--sans);
-    }
-    .add-prop-btn:hover { border-color: var(--green); color: var(--green); background: #f0f5f2; }
+    /* ── Property grid ── */
+    .prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:18px}
+    .prop-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:box-shadow .2s}
+    .prop-card:hover{box-shadow:0 6px 20px rgba(29,48,45,.1)}
+    .prop-img{height:150px;background:#dce2d8;overflow:hidden}
+    .prop-img img{width:100%;height:100%;object-fit:cover}
+    .prop-body{padding:12px 14px}
+    .prop-tag{display:inline-block;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600;margin-bottom:6px;background:#e4ede9;color:var(--green)}
+    .prop-tag.rent{background:#fff3e0;color:#b8600a}
+    .prop-body h4{font-size:14px;font-weight:600;margin-bottom:3px}
+    .prop-body small{color:var(--muted);font-size:11px}
+    .prop-price{font-size:14px;font-weight:700;color:var(--green);margin-top:8px}
+    .prop-actions{display:flex;gap:7px;padding:10px 14px;border-top:1px solid var(--line)}
+    .add-card{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--line);border-radius:var(--r);padding:28px;cursor:pointer;color:var(--muted);font:500 13px var(--sans);background:transparent;width:100%;transition:all .2s}
+    .add-card:hover{border-color:var(--green);color:var(--green);background:#f0f5f2}
 
-    /* Stats */
-    .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-    .stat-card {
-      background: var(--paper); border: 1px solid var(--line);
-      border-radius: var(--radius); padding: 20px 22px;
-    }
-    .stat-card label { font-size: 12px; color: var(--muted); font-weight: 500; }
-    .stat-card input {
-      display: block; width: 100%; margin-top: 8px; padding: 9px 12px;
-      border: 1px solid var(--line); border-radius: 9px;
-      font: 600 18px var(--sans); background: var(--cream);
-      color: var(--green); transition: border-color .2s;
-    }
-    .stat-card input:focus { outline: none; border-color: var(--green); }
+    /* ── List editor (services, process, points) ── */
+    .list-item{display:grid;grid-template-columns:1fr auto;align-items:start;gap:10px;padding:14px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--cream)}
+    .list-item-fields{display:grid;gap:8px}
+    .list-item-actions{display:flex;flex-direction:column;gap:6px;padding-top:2px}
+    .points-list .list-item{grid-template-columns:1fr auto}
 
-    /* Modal */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 100;
-      background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
-      align-items: center; justify-content: center; padding: 20px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: var(--paper); border-radius: 18px; width: min(620px,100%);
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 30px 70px rgba(0,0,0,.2);
-    }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 22px 26px; border-bottom: 1px solid var(--line);
-      position: sticky; top: 0; background: var(--paper); z-index: 1;
-    }
-    .modal-header h3 { font-size: 18px; font-weight: 700; }
-    .modal-close {
-      display: grid; place-items: center; width: 34px; height: 34px;
-      border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
-      background: transparent; font-size: 18px; color: var(--muted);
-      transition: all .18s;
-    }
-    .modal-close:hover { background: var(--cream); color: var(--ink); }
-    .modal-body { padding: 26px; }
-    .modal-footer {
-      display: flex; gap: 10px; justify-content: flex-end;
-      padding: 18px 26px; border-top: 1px solid var(--line);
-    }
+    /* ── Trust strip ── */
+    .trust-items{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .trust-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--cream);border:1px solid var(--line);border-radius:99px;font-size:13px}
+    .trust-chip button{background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;line-height:1;padding:0 2px}
+    .trust-chip button:hover{color:var(--red)}
 
-    /* Toast */
-    #toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: #1d302d; color: white; padding: 12px 22px;
-      border-radius: 99px; font-size: 14px; font-weight: 500;
-      transition: transform .35s cubic-bezier(.2,.8,.2,1); z-index: 999;
-      white-space: nowrap;
-    }
-    #toast.show { transform: translateX(-50%) translateY(0); }
-    #toast.error { background: var(--red); }
+    /* ── Locations ── */
+    .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .loc-card{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--paper)}
+    .loc-img{height:120px;background:#dce2d8;overflow:hidden;position:relative}
+    .loc-img img{width:100%;height:100%;object-fit:cover}
+    .loc-body{padding:14px}
 
-    /* Config */
-    .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    /* ── Stats ── */
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .stat-box{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+    .stat-box label{font-size:11px;color:var(--muted);font-weight:500}
+    .stat-box input{display:block;width:100%;margin-top:7px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:600 17px var(--sans);color:var(--green);background:var(--cream)}
+    .stat-box input:focus{outline:none;border-color:var(--green)}
 
-    /* Image preview */
-    .img-preview { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
-    .img-preview.show { display: block; }
+    /* ── Modal ── */
+    .overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px}
+    .overlay.open{display:flex}
+    .modal{background:var(--paper);border-radius:18px;width:min(600px,100%);max-height:92vh;overflow-y:auto;box-shadow:0 30px 70px rgba(0,0,0,.2)}
+    .modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:1}
+    .modal-hd h3{font-size:17px;font-weight:700}
+    .modal-x{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--line);border-radius:50%;cursor:pointer;background:transparent;font-size:17px;color:var(--muted)}
+    .modal-x:hover{background:var(--cream)}
+    .modal-body{padding:22px 24px}
+    .modal-ft{display:flex;gap:9px;justify-content:flex-end;padding:16px 24px;border-top:1px solid var(--line)}
 
-    @media (max-width: 768px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .content { padding: 20px 18px; }
-      .form-grid, .form-grid.cols-3 { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr; }
+    /* ── Toast ── */
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(70px);background:#1d302d;color:#fff;padding:11px 20px;border-radius:99px;font-size:13px;font-weight:500;transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:999;white-space:nowrap}
+    #toast.show{transform:translateX(-50%) translateY(0)}
+    #toast.err{background:var(--red)}
+
+    /* ── Img preview ── */
+    .img-prev{width:100%;height:130px;object-fit:cover;border-radius:8px;margin-top:8px;display:none}
+    .img-prev.show{display:block}
+
+    @media(max-width:760px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .content{padding:18px 16px}
+      .grid2,.grid3,.stats-row,.loc-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
-<!-- Token Setup (shown only on first visit) -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="13" fill="#21483e"/><path d="M8 22.5 24 10l16 12.5" stroke="#E3C58A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 21.5V34h21V21.5M20 34v-8h8v8" stroke="#F7F5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div><span>سندك ويمناك</span><small>إعداد أولي لمرة واحدة</small></div>
+<!-- Token setup (first visit only) -->
+<div id="setup-screen">
+  <div class="setup-box">
+    <div class="setup-logo">
+      <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="13" fill="#21483e"/><path d="M8 22.5 24 10l16 12.5" stroke="#E3C58A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 21.5V34h21V21.5M20 34v-8h8v8" stroke="#F7F5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>سندك ويمناك</b><small>إعداد أولي — مرة واحدة فقط</small></div>
     </div>
-    <h2>أدخل GitHub Token</h2>
-    <p>يُحفظ في متصفحك فقط ولن يُطلب مرة أخرى</p>
-    <div class="field" style="margin-top:20px">
-      <label>GitHub Token</label>
-      <input type="password" id="token-input" placeholder="ghp_..." autocomplete="off" dir="ltr">
-      <div style="font-size:11px;color:var(--muted);margin-top:5px">توكن بصلاحية <code>repo</code> من github.com/settings/tokens</div>
+    <div class="fg">
+      <label>GitHub Token (يُحفظ في متصفحك)</label>
+      <input type="password" id="setup-token" placeholder="ghp_..." dir="ltr">
+      <span class="hint">توكن بصلاحية repo من <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank">github.com/settings/tokens</a></span>
     </div>
-    <button class="btn btn-primary" onclick="doLogin()">دخول وحفظ</button>
-    <div id="login-error" style="display:none;color:var(--red);font-size:13px;margin-top:10px;text-align:center">التوكن غير صحيح، تأكد أنه يبدأ بـ ghp_</div>
+    <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="setupSave()">حفظ والدخول</button>
+    <div id="setup-err" style="display:none;color:var(--red);font-size:12px;margin-top:8px;text-align:center">التوكن غير صحيح، تأكد أنه يبدأ بـ ghp_</div>
   </div>
 </div>
 
-<!-- App -->
+<!-- Main app -->
 <div id="app">
   <div class="topbar">
     <div class="topbar-brand">لوحة التحكم <small>سندك ويمناك</small></div>
-    <div class="topbar-actions">
-      <span class="save-status" id="save-status"></span>
-      <button class="btn btn-ghost" onclick="previewSite()">معاينة الموقع</button>
-      <button class="btn btn-primary" onclick="saveAll()">حفظ ونشر</button>
-      <button class="btn btn-ghost" onclick="doLogout()" style="font-size:12px">خروج</button>
+    <div class="topbar-right">
+      <span id="save-status"></span>
+      <button class="btn btn-ghost btn-sm" onclick="window.open('https://sanadakwyoumnak.github.io/sanadakwyoumnak/','_blank')">معاينة</button>
+      <button class="btn btn-primary btn-sm" id="publish-btn" onclick="publishAll()">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        حفظ ونشر
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="resetToken()">تغيير التوكن</button>
     </div>
   </div>
 
   <div class="layout">
     <aside class="sidebar">
-      <div class="nav-label">الأقسام</div>
-      <button class="nav-item active" onclick="showPage('properties',this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9 20v-6h6v6"/></svg>
-        العقارات
-      </button>
-      <button class="nav-item" onclick="showPage('contact',this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7.2 3.8h3l1.5 4-2 1.8a15 15 0 0 0 4.7 4.7l1.8-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z"/></svg>
-        التواصل
-      </button>
-      <button class="nav-item" onclick="showPage('stats',this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 26.5V5.5M5 26.5h22M9 22v-6h5v6M17 22V10h5v12"/></svg>
-        الإحصائيات
-      </button>
-      <div class="nav-label">النظام</div>
-      <button class="nav-item" onclick="showPage('settings',this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
-        الإعدادات
-      </button>
+      <div class="nav-section">الرئيسية</div>
+      <button class="nav-btn active" onclick="go('hero',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>الـ Hero</button>
+      <button class="nav-btn" onclick="go('trust',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>شريط الثقة</button>
+
+      <div class="nav-section">الأقسام</div>
+      <button class="nav-btn" onclick="go('services',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 6h16M4 12h16M4 18h16"/></svg>الخدمات</button>
+      <button class="nav-btn" onclick="go('properties',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9 20v-6h6v6"/></svg>العقارات</button>
+      <button class="nav-btn" onclick="go('about',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>من نحن</button>
+      <button class="nav-btn" onclick="go('locations',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg>المناطق</button>
+      <button class="nav-btn" onclick="go('process',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>خطوات العمل</button>
+
+      <div class="nav-section">الإعدادات</div>
+      <button class="nav-btn" onclick="go('contact',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M7.2 3.8h3l1.5 4-2 1.8a15 15 0 0 0 4.7 4.7l1.8-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z"/></svg>التواصل</button>
+      <button class="nav-btn" onclick="go('footer',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 20h16M4 4h16M8 8h8M8 12h8M8 16h4"/></svg>الفوتر</button>
+      <button class="nav-btn" onclick="go('brand',this)"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>الهوية</button>
     </aside>
 
     <main class="content">
 
-      <!-- Properties -->
-      <div class="page active" id="page-properties">
-        <div class="page-header">
-          <h1>العقارات</h1>
-          <p>أضف وعدّل وأدر عقاراتك المعروضة</p>
+      <!-- HERO -->
+      <div class="page active" id="page-hero">
+        <div class="ph"><h1>قسم الـ Hero</h1><p>الجزء الأول اللي يشوفه الزائر</p></div>
+        <div class="card">
+          <div class="card-hd"><h3>النصوص الرئيسية</h3></div>
+          <div class="grid2">
+            <div class="fg span2"><label>الجملة الصغيرة (Eyebrow)</label><input id="h-eyebrow"></div>
+            <div class="fg"><label>السطر الأول من العنوان</label><input id="h-h1"></div>
+            <div class="fg"><label>السطر الثاني من العنوان</label><input id="h-h2"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="h-desc"></textarea></div>
+            <div class="fg"><label>زر رئيسي</label><input id="h-cta1"></div>
+            <div class="fg"><label>زر ثانوي</label><input id="h-cta2"></div>
+            <div class="fg"><label>عنوان الملاحظة السفلية</label><input id="h-note-title"></div>
+            <div class="fg"><label>نص الملاحظة السفلية</label><input id="h-note-sub"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>الإحصائيات</h3></div>
+          <div class="stats-row" id="stats-row"></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>صورة الـ Hero</h3></div>
+          <div class="fg"><label>رابط الصورة</label><input id="h-img" dir="ltr" oninput="prev('h-img-prev',this.value)"></div>
+          <div class="fg"><label>وصف الصورة</label><input id="h-img-alt"></div>
+          <div class="fg"><label>تعليق صغير على الصورة</label><input id="h-cap-sm"></div>
+          <div class="fg"><label>تعليق كبير على الصورة</label><input id="h-cap-str"></div>
+          <img id="h-img-prev" class="img-prev" alt="">
+        </div>
+      </div>
+
+      <!-- TRUST STRIP -->
+      <div class="page" id="page-trust">
+        <div class="ph"><h1>شريط الثقة</h1><p>الشريط اللي تحت الـ Hero</p></div>
+        <div class="card">
+          <div class="fg"><label>النص الجانبي</label><input id="ts-label"></div>
+          <div class="fg">
+            <label>الكلمات (اضغط + لإضافة)</label>
+            <div class="trust-items" id="trust-items"></div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <input id="trust-new" placeholder="كلمة جديدة" style="padding:7px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--cream);flex:1">
+              <button class="btn btn-ghost btn-sm" onclick="addTrustItem()">+ إضافة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICES -->
+      <div class="page" id="page-services">
+        <div class="ph"><h1>الخدمات</h1><p>قسم الخدمات العقارية</p></div>
+        <div class="card">
+          <div class="card-hd"><h3>عنوان القسم</h3></div>
+          <div class="grid2">
+            <div class="fg"><label>الكلمة الصغيرة</label><input id="sv-eyebrow"></div>
+            <div class="fg"><label>العنوان الرئيسي</label><input id="sv-heading"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="sv-desc"></textarea></div>
+            <div class="fg"><label>سؤال بطاقة CTA</label><input id="sv-cta-q"></div>
+            <div class="fg"><label>نص بطاقة CTA</label><input id="sv-cta-t"></div>
+            <div class="fg"><label>رابط بطاقة CTA</label><input id="sv-cta-l"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>قائمة الخدمات</h3></div>
+          <div id="services-list"></div>
+        </div>
+      </div>
+
+      <!-- PROPERTIES -->
+      <div class="page" id="page-properties">
+        <div class="ph"><h1>العقارات</h1><p>العقارات المعروضة</p></div>
+        <div class="card">
+          <div class="card-hd"><h3>عنوان القسم</h3></div>
+          <div class="grid2">
+            <div class="fg"><label>الكلمة الصغيرة</label><input id="pr-eyebrow"></div>
+            <div class="fg"><label>العنوان</label><input id="pr-heading"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="pr-desc"></textarea></div>
+            <div class="fg"><label>نص زر «عرض الكل»</label><input id="pr-cta"></div>
+          </div>
         </div>
         <div class="prop-grid" id="prop-grid"></div>
-        <button class="add-prop-btn" onclick="openPropModal()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg>
+        <button class="add-card" onclick="openProp()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           إضافة عقار جديد
         </button>
       </div>
 
-      <!-- Contact -->
+      <!-- ABOUT -->
+      <div class="page" id="page-about">
+        <div class="ph"><h1>من نحن</h1><p>قسم التعريف بالشركة</p></div>
+        <div class="card">
+          <div class="grid2">
+            <div class="fg"><label>الكلمة الصغيرة</label><input id="ab-eyebrow"></div>
+            <div class="fg"><label>العنوان</label><input id="ab-heading"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="ab-desc"></textarea></div>
+            <div class="fg"><label>قيمة الشارة</label><input id="ab-badge-v"></div>
+            <div class="fg"><label>نص الشارة</label><input id="ab-badge-l"></div>
+            <div class="fg"><label>نص الزر</label><input id="ab-cta"></div>
+            <div class="fg"><label>رابط الصورة</label><input id="ab-img" dir="ltr" oninput="prev('ab-img-prev',this.value)"></div>
+            <div class="fg"><label>وصف الصورة</label><input id="ab-img-alt"></div>
+          </div>
+          <img id="ab-img-prev" class="img-prev" alt="">
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>نقاط المميزات</h3></div>
+          <div id="about-points"></div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="addPoint()">+ إضافة نقطة</button>
+        </div>
+      </div>
+
+      <!-- LOCATIONS -->
+      <div class="page" id="page-locations">
+        <div class="ph"><h1>المناطق</h1><p>مدن التغطية</p></div>
+        <div class="card">
+          <div class="grid2">
+            <div class="fg"><label>الكلمة الصغيرة</label><input id="lo-eyebrow"></div>
+            <div class="fg"><label>العنوان</label><input id="lo-heading"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="lo-desc"></textarea></div>
+          </div>
+        </div>
+        <div class="loc-grid" id="loc-grid"></div>
+      </div>
+
+      <!-- PROCESS -->
+      <div class="page" id="page-process">
+        <div class="ph"><h1>خطوات العمل</h1><p>رحلة العميل معك</p></div>
+        <div class="card">
+          <div class="grid2">
+            <div class="fg"><label>الكلمة الصغيرة</label><input id="pc-eyebrow"></div>
+            <div class="fg"><label>العنوان</label><input id="pc-heading"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="pc-desc"></textarea></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>الخطوات</h3></div>
+          <div id="process-steps"></div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
       <div class="page" id="page-contact">
-        <div class="page-header">
-          <h1>معلومات التواصل</h1>
-          <p>رقم الهاتف وواتساب الظاهر في الموقع</p>
+        <div class="ph"><h1>التواصل</h1><p>بيانات الاتصال في الموقع</p></div>
+        <div class="card">
+          <div class="grid2">
+            <div class="fg"><label>رقم الهاتف (بدون +)</label><input id="ct-phone" dir="ltr"></div>
+            <div class="fg"><label>رقم العرض للزوار</label><input id="ct-disp" dir="ltr"></div>
+            <div class="fg"><label>رقم واتساب (بدون +)</label><input id="ct-wa" dir="ltr"></div>
+          </div>
         </div>
         <div class="card">
-          <div class="card-header"><h3>بيانات التواصل</h3></div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>رقم الهاتف (بدون +)</label>
-              <input type="text" id="c-phone" placeholder="966563055124" dir="ltr">
-              <span class="form-hint">مثال: 966563055124</span>
-            </div>
-            <div class="form-group">
-              <label>رقم العرض (للزوار)</label>
-              <input type="text" id="c-phone-display" placeholder="056 305 5124" dir="ltr">
-            </div>
-            <div class="form-group">
-              <label>رقم واتساب (بدون +)</label>
-              <input type="text" id="c-whatsapp" placeholder="966563055124" dir="ltr">
-            </div>
+          <div class="card-hd"><h3>نصوص قسم التواصل</h3></div>
+          <div class="grid2">
+            <div class="fg"><label>الكلمة الصغيرة</label><input id="cs-eyebrow"></div>
+            <div class="fg"><label>العنوان</label><input id="cs-heading"></div>
+            <div class="fg span2"><label>الوصف</label><textarea id="cs-desc"></textarea></div>
           </div>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="page" id="page-stats">
-        <div class="page-header">
-          <h1>الإحصائيات</h1>
-          <p>الأرقام الظاهرة في أعلى الصفحة الرئيسية</p>
+      <!-- FOOTER -->
+      <div class="page" id="page-footer">
+        <div class="ph"><h1>الفوتر</h1><p>أسفل الصفحة</p></div>
+        <div class="card">
+          <div class="fg"><label>وصف الشركة</label><textarea id="ft-desc"></textarea></div>
+          <div class="fg"><label>نص حقوق النشر</label><input id="ft-copy"></div>
+          <div class="fg"><label>سطر الموقع</label><input id="ft-loc"></div>
         </div>
-        <div class="stats-grid" id="stats-grid"></div>
       </div>
 
-      <!-- Settings -->
-      <div class="page" id="page-settings">
-        <div class="page-header">
-          <h1>الإعدادات</h1>
-          <p>إعدادات الربط مع GitHub</p>
-        </div>
+      <!-- BRAND -->
+      <div class="page" id="page-brand">
+        <div class="ph"><h1>هوية الشركة</h1><p>الاسم والشعار</p></div>
         <div class="card">
-          <div class="card-header"><h3>إعدادات GitHub</h3></div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>اسم المستخدم</label>
-              <input type="text" id="s-owner" placeholder="sanadakwyoumnak" dir="ltr">
-            </div>
-            <div class="form-group">
-              <label>اسم الـ Repository</label>
-              <input type="text" id="s-repo" placeholder="sanadakwyoumnak" dir="ltr">
-            </div>
-            <div class="form-group">
-              <label>الفرع</label>
-              <input type="text" id="s-branch" placeholder="main" dir="ltr">
-            </div>
-            <div class="form-group">
-              <label>تغيير كلمة المرور</label>
-              <input type="password" id="s-newpass" placeholder="اتركه فاضياً لعدم التغيير">
-            </div>
-          </div>
-          <div style="margin-top:16px">
-            <button class="btn btn-primary" onclick="saveSettings()" style="width:auto;padding:11px 28px">حفظ الإعدادات</button>
+          <div class="grid2">
+            <div class="fg"><label>اسم الشركة</label><input id="br-name"></div>
+            <div class="fg"><label>الشعار النصي (Tagline)</label><input id="br-tag" dir="ltr"></div>
           </div>
         </div>
       </div>
@@ -373,66 +388,32 @@
 </div>
 
 <!-- Property Modal -->
-<div class="modal-overlay" id="prop-modal">
+<div class="overlay" id="prop-overlay">
   <div class="modal">
-    <div class="modal-header">
-      <h3 id="modal-title">عقار جديد</h3>
-      <button class="modal-close" onclick="closePropModal()">×</button>
+    <div class="modal-hd">
+      <h3 id="prop-modal-title">عقار جديد</h3>
+      <button class="modal-x" onclick="closeProp()">×</button>
     </div>
     <div class="modal-body">
-      <input type="hidden" id="prop-id">
-      <div class="form-grid">
-        <div class="form-group form-full">
-          <label>عنوان العقار</label>
-          <input type="text" id="prop-title" placeholder="مثال: فيلا عصرية بإضاءة طبيعية">
-        </div>
-        <div class="form-group">
-          <label>الموقع</label>
-          <input type="text" id="prop-location" placeholder="جدة، حي الروضة">
-        </div>
-        <div class="form-group">
-          <label>الحالة</label>
-          <select id="prop-tag">
-            <option value="للبيع">للبيع</option>
-            <option value="للإيجار">للإيجار</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>المساحة</label>
-          <input type="text" id="prop-area" placeholder="٣٢٠ م²">
-        </div>
-        <div class="form-group">
-          <label>غرف النوم</label>
-          <input type="text" id="prop-beds" placeholder="٤ غرف نوم">
-        </div>
-        <div class="form-group">
-          <label>الحمامات</label>
-          <input type="text" id="prop-baths" placeholder="٣ حمامات">
-        </div>
-        <div class="form-group">
-          <label>السعر (الأرقام فقط)</label>
-          <input type="text" id="prop-price" placeholder="٢٬٨٥٠٬٠٠٠" dir="ltr">
-        </div>
-        <div class="form-group">
-          <label>لاحقة السعر</label>
-          <input type="text" id="prop-price-suffix" placeholder="ر.س أو ر.س / سنوي">
-        </div>
-        <div class="form-group form-full">
-          <label>رابط الصورة</label>
-          <input type="url" id="prop-image" placeholder="https://..." dir="ltr" oninput="previewImg(this.value)">
-          <span class="form-hint">رابط صورة من unsplash أو أي رابط مباشر</span>
-          <img id="prop-img-preview" class="img-preview" alt="معاينة الصورة">
-        </div>
-        <div class="form-group form-full">
-          <label>وصف الصورة (للإمكانية)</label>
-          <input type="text" id="prop-img-alt" placeholder="وصف مختصر للصورة">
-        </div>
+      <input type="hidden" id="pm-id">
+      <div class="grid2">
+        <div class="fg span2"><label>عنوان العقار</label><input id="pm-title"></div>
+        <div class="fg"><label>الموقع</label><input id="pm-loc"></div>
+        <div class="fg"><label>الحالة</label><select id="pm-tag"><option>للبيع</option><option>للإيجار</option></select></div>
+        <div class="fg"><label>المساحة</label><input id="pm-area" placeholder="٣٢٠ م²"></div>
+        <div class="fg"><label>غرف النوم</label><input id="pm-beds" placeholder="٤ غرف نوم"></div>
+        <div class="fg"><label>الحمامات</label><input id="pm-baths" placeholder="٣ حمامات"></div>
+        <div class="fg"><label>السعر</label><input id="pm-price" placeholder="٢٬٨٥٠٬٠٠٠" dir="ltr"></div>
+        <div class="fg"><label>لاحقة السعر</label><input id="pm-psuffix" placeholder="ر.س"></div>
+        <div class="fg span2"><label>رابط الصورة</label><input id="pm-img" dir="ltr" oninput="prev('pm-img-prev',this.value)"></div>
+        <div class="fg span2"><label>وصف الصورة</label><input id="pm-imgalt"></div>
       </div>
+      <img id="pm-img-prev" class="img-prev" alt="">
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closePropModal()">إلغاء</button>
-      <button class="btn btn-danger" id="delete-prop-btn" onclick="deleteProp()" style="display:none">حذف العقار</button>
-      <button class="btn btn-primary" onclick="saveProp()">حفظ العقار</button>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeProp()">إلغاء</button>
+      <button class="btn btn-danger btn-sm" id="pm-del" onclick="deleteProp()" style="display:none">حذف</button>
+      <button class="btn btn-primary" onclick="saveProp()">حفظ</button>
     </div>
   </div>
 </div>
@@ -440,316 +421,447 @@
 <div id="toast"></div>
 
 <script>
-  // ─── Config ───────────────────────────────────────────────
-  const DEFAULT_PASS = '12-12';
-  const REPO_OWNER   = 'sanadakwyoumnak';
-  const REPO_NAME    = 'sanadakwyoumnak';
-  const BRANCH       = 'main';
-  const DATA_PATH    = 'data.json';
+// ═══════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════
+const GH_OWNER  = 'sanadakwyoumnak';
+const GH_REPO   = 'sanadakwyoumnak';
+const GH_BRANCH = 'main';
+const DATA_FILE = 'data.json';
 
-  // ─── State ────────────────────────────────────────────────
-  let DATA = {};
-  let GH_TOKEN = localStorage.getItem('sw_gh_token') || '';
-  let editingPropId = null;
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let D    = {};   // full data object
+let SHA  = '';   // current file sha
+let TOKEN = localStorage.getItem('sw_token') || '';
+let editingPropId = null;
 
-  // ─── Login ────────────────────────────────────────────────
-  function getSettings() {
-    return {
-      owner:  localStorage.getItem('sw_owner')  || REPO_OWNER,
-      repo:   localStorage.getItem('sw_repo')   || REPO_NAME,
-      branch: localStorage.getItem('sw_branch') || BRANCH,
-      pass:   localStorage.getItem('sw_pass')   || DEFAULT_PASS,
-    };
+// ═══════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  if (TOKEN) { showApp(); }
+  else       { document.getElementById('setup-screen').style.display = 'flex'; }
+});
+
+function setupSave() {
+  const t = document.getElementById('setup-token').value.trim();
+  if (!t.startsWith('ghp_')) { document.getElementById('setup-err').style.display = 'block'; return; }
+  TOKEN = t;
+  localStorage.setItem('sw_token', t);
+  document.getElementById('setup-screen').style.display = 'none';
+  showApp();
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('setup-screen').style.display === 'flex') setupSave();
+});
+
+function resetToken() {
+  localStorage.removeItem('sw_token');
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById('app').style.display = 'block';
+  loadData();
+}
+
+// ═══════════════════════════════════════════════
+//  GITHUB API
+// ═══════════════════════════════════════════════
+const ghAPI = p => `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${p}?ref=${GH_BRANCH}`;
+const ghHdr = () => ({ 'Authorization': `Bearer ${TOKEN}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' });
+
+async function loadData() {
+  setStatus('جارٍ التحميل…', 'saving');
+  try {
+    const r = await fetch(ghAPI(DATA_FILE), { headers: ghHdr() });
+    const j = await r.json();
+    if (j.message) throw new Error(j.message);
+    SHA = j.sha;
+    D   = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
+    fillAll();
+    setStatus('تم التحميل ✓', 'saved');
+  } catch(e) {
+    setStatus('خطأ: ' + e.message, 'error');
+    toast('فشل التحميل: ' + e.message, true);
   }
+}
 
-  function doLogin() {
-    const token = document.getElementById('token-input').value.trim();
-    if (!token.startsWith('ghp_')) {
-      document.getElementById('login-error').style.display = 'block';
-      return;
-    }
-    GH_TOKEN = token;
-    localStorage.setItem('sw_gh_token', token);
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadData();
+async function publishAll() {
+  collectAll();
+  const btn = document.getElementById('publish-btn');
+  btn.disabled = true; btn.textContent = 'جارٍ النشر…';
+  setStatus('جارٍ النشر…', 'saving');
+  try {
+    const body = { message: 'تحديث بيانات الموقع من لوحة التحكم', content: btoa(unescape(encodeURIComponent(JSON.stringify(D, null, 2)))), branch: GH_BRANCH, sha: SHA };
+    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${DATA_FILE}`, { method: 'PUT', headers: ghHdr(), body: JSON.stringify(body) });
+    const j = await r.json();
+    if (!j.content) throw new Error(j.message || 'فشل');
+    SHA = j.content.sha;
+    setStatus('تم النشر ✓', 'saved');
+    toast('تم النشر! سيظهر التحديث خلال دقيقة ✓');
+  } catch(e) {
+    setStatus('خطأ في النشر', 'error');
+    toast('فشل النشر: ' + e.message, true);
   }
+  btn.disabled = false;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" width="14" height="14"><path d="M12 19V5M5 12l7-7 7 7"/></svg> حفظ ونشر';
+}
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+// ═══════════════════════════════════════════════
+//  FILL FORMS FROM DATA
+// ═══════════════════════════════════════════════
+function fillAll() {
+  const h = D.hero || {};
+  v('h-eyebrow', h.eyebrow); v('h-h1', h.heading_1); v('h-h2', h.heading_2);
+  v('h-desc', h.description); v('h-cta1', h.cta_primary); v('h-cta2', h.cta_secondary);
+  v('h-note-title', h.note_title); v('h-note-sub', h.note_subtitle);
+  v('h-img', h.image); v('h-img-alt', h.image_alt);
+  v('h-cap-sm', h.image_caption_small); v('h-cap-str', h.image_caption_strong);
+  if (h.image) prev('h-img-prev', h.image);
+  fillStats();
+
+  const ts = D.trust_strip || {};
+  v('ts-label', ts.label);
+  renderTrustItems();
+
+  const sv = D.services || {};
+  v('sv-eyebrow', sv.eyebrow); v('sv-heading', sv.heading); v('sv-desc', sv.description);
+  v('sv-cta-q', sv.cta_question); v('sv-cta-t', sv.cta_text); v('sv-cta-l', sv.cta_link);
+  renderServicesList();
+
+  const pr = D.properties || {};
+  v('pr-eyebrow', pr.eyebrow); v('pr-heading', pr.heading);
+  v('pr-desc', pr.description); v('pr-cta', pr.cta);
+  renderProps();
+
+  const ab = D.about || {};
+  v('ab-eyebrow', ab.eyebrow); v('ab-heading', ab.heading); v('ab-desc', ab.description);
+  v('ab-badge-v', ab.badge_value); v('ab-badge-l', ab.badge_label); v('ab-cta', ab.cta);
+  v('ab-img', ab.image); v('ab-img-alt', ab.image_alt);
+  if (ab.image) prev('ab-img-prev', ab.image);
+  renderPoints();
+
+  const lo = D.locations || {};
+  v('lo-eyebrow', lo.eyebrow); v('lo-heading', lo.heading); v('lo-desc', lo.description);
+  renderLocations();
+
+  const pc = D.process || {};
+  v('pc-eyebrow', pc.eyebrow); v('pc-heading', pc.heading); v('pc-desc', pc.description);
+  renderSteps();
+
+  const ct = D.contact || {};
+  v('ct-phone', ct.phone); v('ct-disp', ct.phone_display); v('ct-wa', ct.whatsapp);
+  const cs = D.contact_section || {};
+  v('cs-eyebrow', cs.eyebrow); v('cs-heading', cs.heading); v('cs-desc', cs.description);
+
+  const ft = D.footer || {};
+  v('ft-desc', ft.description); v('ft-copy', ft.copyright); v('ft-loc', ft.location_line);
+
+  const br = D.brand || {};
+  v('br-name', br.name); v('br-tag', br.tagline);
+}
+
+// ═══════════════════════════════════════════════
+//  COLLECT FORMS INTO DATA
+// ═══════════════════════════════════════════════
+function collectAll() {
+  D.hero = {
+    ...D.hero,
+    eyebrow: g('h-eyebrow'), heading_1: g('h-h1'), heading_2: g('h-h2'),
+    description: g('h-desc'), cta_primary: g('h-cta1'), cta_secondary: g('h-cta2'),
+    note_title: g('h-note-title'), note_subtitle: g('h-note-sub'),
+    image: g('h-img'), image_alt: g('h-img-alt'),
+    image_caption_small: g('h-cap-sm'), image_caption_strong: g('h-cap-str'),
+  };
+  collectStats();
+
+  D.trust_strip = { label: g('ts-label'), items: [...(D.trust_strip?.items || [])] };
+
+  D.services = {
+    ...D.services,
+    eyebrow: g('sv-eyebrow'), heading: g('sv-heading'), description: g('sv-desc'),
+    cta_question: g('sv-cta-q'), cta_text: g('sv-cta-t'), cta_link: g('sv-cta-l'),
+  };
+
+  D.properties = {
+    ...D.properties,
+    eyebrow: g('pr-eyebrow'), heading: g('pr-heading'),
+    description: g('pr-desc'), cta: g('pr-cta'),
+  };
+
+  D.about = {
+    ...D.about,
+    eyebrow: g('ab-eyebrow'), heading: g('ab-heading'), description: g('ab-desc'),
+    badge_value: g('ab-badge-v'), badge_label: g('ab-badge-l'), cta: g('ab-cta'),
+    image: g('ab-img'), image_alt: g('ab-img-alt'),
+  };
+  collectPoints();
+
+  D.locations = { ...D.locations, eyebrow: g('lo-eyebrow'), heading: g('lo-heading'), description: g('lo-desc') };
+  collectLocations();
+
+  D.process = { ...D.process, eyebrow: g('pc-eyebrow'), heading: g('pc-heading'), description: g('pc-desc') };
+  collectSteps();
+
+  D.contact = { phone: g('ct-phone'), phone_display: g('ct-disp'), whatsapp: g('ct-wa') };
+  D.contact_section = { ...D.contact_section, eyebrow: g('cs-eyebrow'), heading: g('cs-heading'), description: g('cs-desc') };
+
+  D.footer = { description: g('ft-desc'), copyright: g('ft-copy'), location_line: g('ft-loc') };
+  D.brand  = { name: g('br-name'), tagline: g('br-tag') };
+}
+
+// ═══════════════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════════════
+function fillStats() {
+  const row = document.getElementById('stats-row');
+  row.innerHTML = '';
+  (D.hero?.stats || []).forEach((s, i) => {
+    row.insertAdjacentHTML('beforeend', `
+      <div class="stat-box">
+        <label>${s.label}</label>
+        <input value="${s.value}" data-si="${i}" oninput="D.hero.stats[${i}].value=this.value">
+        <div style="margin-top:8px"><input value="${s.label}" placeholder="التسمية" data-sl="${i}" style="font-size:12px;font-weight:400;color:var(--muted)" oninput="D.hero.stats[${i}].label=this.value;this.previousElementSibling.previousElementSibling.textContent=this.value"></div>
+      </div>`);
   });
+}
+function collectStats() { /* collected live via oninput */ }
 
-  // Auto-login — مباشر إذا التوكن محفوظ
-  window.addEventListener('DOMContentLoaded', () => {
-    loadSettingsForm();
-    if (GH_TOKEN) {
-      document.getElementById('app').style.display = 'block';
-      loadData();
-    } else {
-      document.getElementById('login-screen').style.display = 'flex';
-    }
+// ═══════════════════════════════════════════════
+//  TRUST STRIP
+// ═══════════════════════════════════════════════
+function renderTrustItems() {
+  const el = document.getElementById('trust-items');
+  el.innerHTML = '';
+  (D.trust_strip?.items || []).forEach((item, i) => {
+    el.insertAdjacentHTML('beforeend', `
+      <div class="trust-chip">
+        <span>${item}</span>
+        <button onclick="removeTrust(${i})" title="حذف">×</button>
+      </div>`);
   });
+}
+function addTrustItem() {
+  const inp = document.getElementById('trust-new');
+  const val = inp.value.trim();
+  if (!val) return;
+  if (!D.trust_strip) D.trust_strip = { items: [] };
+  D.trust_strip.items.push(val);
+  inp.value = '';
+  renderTrustItems();
+}
+function removeTrust(i) {
+  D.trust_strip.items.splice(i, 1);
+  renderTrustItems();
+}
 
-  function doLogout() {
-    localStorage.removeItem('sw_gh_token');
-    location.reload();
-  }
-
-  // ─── GitHub API ───────────────────────────────────────────
-  function ghHeaders() {
-    return {
-      'Authorization': `Bearer ${GH_TOKEN}`,
-      'Accept': 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    };
-  }
-
-  async function ghGet(path) {
-    const s = getSettings();
-    const r = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}?ref=${s.branch}`, { headers: ghHeaders() });
-    return r.json();
-  }
-
-  async function ghPut(path, content, sha, message) {
-    const s = getSettings();
-    const body = { message, content: btoa(unescape(encodeURIComponent(content))), branch: s.branch };
-    if (sha) body.sha = sha;
-    const r = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`, {
-      method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body)
-    });
-    return r.json();
-  }
-
-  // ─── Load Data ────────────────────────────────────────────
-  async function loadData() {
-    setStatus('جارٍ التحميل…', 'saving');
-    try {
-      const file = await ghGet(DATA_PATH);
-      const json = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
-      DATA = JSON.parse(json);
-      DATA._sha = file.sha;
-      renderAll();
-      setStatus('تم التحميل ✓', 'saved');
-    } catch(e) {
-      setStatus('خطأ في التحميل', 'error');
-      showToast('خطأ في تحميل البيانات', true);
-    }
-  }
-
-  // ─── Render ───────────────────────────────────────────────
-  function renderAll() {
-    renderProps();
-    renderContact();
-    renderStats();
-  }
-
-  function renderProps() {
-    const grid = document.getElementById('prop-grid');
-    grid.innerHTML = '';
-    (DATA.properties || []).forEach(p => {
-      const isRent = p.tag === 'للإيجار';
-      grid.insertAdjacentHTML('beforeend', `
-        <div class="prop-card">
-          <div class="prop-card-img">
-            <img src="${p.image}" alt="${p.image_alt}" onerror="this.style.display='none'">
-          </div>
-          <div class="prop-card-body">
-            <span class="prop-card-tag ${isRent?'rent':''}">${p.tag}</span>
-            <h4>${p.title}</h4>
-            <small>${p.location}</small>
-            <div class="prop-card-price">${p.price} <span style="font-size:12px;font-weight:400;color:var(--muted)">${p.price_suffix}</span></div>
-          </div>
-          <div class="prop-card-actions">
-            <button class="btn btn-ghost" onclick="openPropModal('${p.id}')">تعديل</button>
-          </div>
+// ═══════════════════════════════════════════════
+//  SERVICES LIST
+// ═══════════════════════════════════════════════
+function renderServicesList() {
+  const el = document.getElementById('services-list');
+  el.innerHTML = '';
+  (D.services?.items || []).forEach((s, i) => {
+    el.insertAdjacentHTML('beforeend', `
+      <div class="list-item">
+        <div class="list-item-fields">
+          <input value="${s.title}" placeholder="عنوان الخدمة" oninput="D.services.items[${i}].title=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--paper)">
+          <textarea placeholder="وصف الخدمة" oninput="D.services.items[${i}].description=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--paper);resize:vertical;min-height:60px">${s.description}</textarea>
         </div>
-      `);
-    });
-  }
-
-  function renderContact() {
-    const c = DATA.contact || {};
-    document.getElementById('c-phone').value         = c.phone         || '';
-    document.getElementById('c-phone-display').value = c.phone_display || '';
-    document.getElementById('c-whatsapp').value      = c.whatsapp      || '';
-  }
-
-  function renderStats() {
-    const grid = document.getElementById('stats-grid');
-    grid.innerHTML = '';
-    (DATA.hero?.stats || []).forEach((s, i) => {
-      grid.insertAdjacentHTML('beforeend', `
-        <div class="stat-card">
-          <label>${s.label}</label>
-          <input type="text" value="${s.value}" data-stat-i="${i}" oninput="updateStat(${i},this.value)">
+        <div class="list-item-actions">
+          <button class="btn btn-danger btn-sm" onclick="removeService(${i})">حذف</button>
         </div>
-      `);
-    });
-  }
+      </div>`);
+  });
+}
+function removeService(i) {
+  D.services.items.splice(i, 1);
+  renderServicesList();
+}
 
-  // ─── Stat update ─────────────────────────────────────────
-  function updateStat(i, val) {
-    if (!DATA.hero) DATA.hero = { stats: [] };
-    DATA.hero.stats[i].value = val;
-  }
+// ═══════════════════════════════════════════════
+//  PROPERTIES
+// ═══════════════════════════════════════════════
+function renderProps() {
+  const grid = document.getElementById('prop-grid');
+  grid.innerHTML = '';
+  (D.properties?.items || []).forEach(p => {
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="prop-card">
+        <div class="prop-img"><img src="${p.image}" onerror="this.style.display='none'" alt=""></div>
+        <div class="prop-body">
+          <span class="prop-tag${p.tag==='للإيجار'?' rent':''}">${p.tag}</span>
+          <h4>${p.title}</h4>
+          <small>${p.location}</small>
+          <div class="prop-price">${p.price} <span style="font-size:11px;font-weight:400;color:var(--muted)">${p.price_suffix}</span></div>
+        </div>
+        <div class="prop-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openProp('${p.id}')">تعديل</button>
+        </div>
+      </div>`);
+  });
+}
 
-  // ─── Contact update ───────────────────────────────────────
-  function collectContact() {
-    DATA.contact = {
-      phone:         document.getElementById('c-phone').value.trim(),
-      phone_display: document.getElementById('c-phone-display').value.trim(),
-      whatsapp:      document.getElementById('c-whatsapp').value.trim(),
-    };
+function openProp(id) {
+  editingPropId = id || null;
+  document.getElementById('prop-modal-title').textContent = id ? 'تعديل العقار' : 'عقار جديد';
+  document.getElementById('pm-del').style.display = id ? 'inline-flex' : 'none';
+  if (id) {
+    const p = D.properties.items.find(x => x.id === id);
+    if (!p) return;
+    v('pm-id', p.id); v('pm-title', p.title); v('pm-loc', p.location);
+    document.getElementById('pm-tag').value = p.tag;
+    v('pm-area', p.area); v('pm-beds', p.beds); v('pm-baths', p.baths);
+    v('pm-price', p.price); v('pm-psuffix', p.price_suffix);
+    v('pm-img', p.image); v('pm-imgalt', p.image_alt);
+    prev('pm-img-prev', p.image);
+  } else {
+    ['pm-id','pm-title','pm-loc','pm-area','pm-beds','pm-baths','pm-price','pm-img','pm-imgalt'].forEach(x=>v(x,''));
+    v('pm-psuffix','ر.س');
+    document.getElementById('pm-tag').value='للبيع';
+    document.getElementById('pm-img-prev').className='img-prev';
   }
+  document.getElementById('prop-overlay').classList.add('open');
+}
+function closeProp() {
+  document.getElementById('prop-overlay').classList.remove('open');
+  editingPropId = null;
+}
+function saveProp() {
+  const p = {
+    id: editingPropId || 'p'+Date.now(),
+    title: g('pm-title'), location: g('pm-loc'),
+    tag: document.getElementById('pm-tag').value,
+    area: g('pm-area'), beds: g('pm-beds'), baths: g('pm-baths'),
+    price: g('pm-price'), price_suffix: g('pm-psuffix'),
+    image: g('pm-img'), image_alt: g('pm-imgalt'),
+  };
+  if (!p.title) { toast('اكتب عنوان العقار', true); return; }
+  if (!D.properties) D.properties = { items: [] };
+  if (!D.properties.items) D.properties.items = [];
+  if (editingPropId) {
+    const idx = D.properties.items.findIndex(x => x.id === editingPropId);
+    if (idx > -1) D.properties.items[idx] = p;
+  } else {
+    D.properties.items.push(p);
+  }
+  renderProps(); closeProp();
+  toast('محفوظ — اضغط «حفظ ونشر» للنشر');
+}
+function deleteProp() {
+  if (!editingPropId || !confirm('حذف هذا العقار؟')) return;
+  D.properties.items = D.properties.items.filter(x => x.id !== editingPropId);
+  renderProps(); closeProp();
+  toast('تم الحذف — اضغط «حفظ ونشر» للنشر');
+}
 
-  // ─── Property Modal ───────────────────────────────────────
-  function openPropModal(id) {
-    editingPropId = id || null;
-    const modal = document.getElementById('prop-modal');
-    const delBtn = document.getElementById('delete-prop-btn');
-    document.getElementById('modal-title').textContent = id ? 'تعديل العقار' : 'عقار جديد';
-    delBtn.style.display = id ? 'inline-flex' : 'none';
-    if (id) {
-      const p = DATA.properties.find(x => x.id === id);
-      if (!p) return;
-      document.getElementById('prop-id').value           = p.id;
-      document.getElementById('prop-title').value        = p.title;
-      document.getElementById('prop-location').value     = p.location;
-      document.getElementById('prop-tag').value          = p.tag;
-      document.getElementById('prop-area').value         = p.area;
-      document.getElementById('prop-beds').value         = p.beds;
-      document.getElementById('prop-baths').value        = p.baths;
-      document.getElementById('prop-price').value        = p.price;
-      document.getElementById('prop-price-suffix').value = p.price_suffix;
-      document.getElementById('prop-image').value        = p.image;
-      document.getElementById('prop-img-alt').value      = p.image_alt;
-      previewImg(p.image);
-    } else {
-      ['prop-title','prop-location','prop-area','prop-beds','prop-baths','prop-price','prop-image','prop-img-alt'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('prop-price-suffix').value = 'ر.س';
-      document.getElementById('prop-tag').value = 'للبيع';
-      document.getElementById('prop-img-preview').className = 'img-preview';
-    }
-    modal.classList.add('open');
-  }
+// ═══════════════════════════════════════════════
+//  ABOUT POINTS
+// ═══════════════════════════════════════════════
+function renderPoints() {
+  const el = document.getElementById('about-points');
+  el.innerHTML = '';
+  (D.about?.points || []).forEach((pt, i) => {
+    el.insertAdjacentHTML('beforeend', `
+      <div class="list-item points-list">
+        <input value="${pt}" oninput="D.about.points[${i}]=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--paper)">
+        <button class="btn btn-danger btn-sm" onclick="removePoint(${i})">×</button>
+      </div>`);
+  });
+}
+function addPoint() {
+  if (!D.about) D.about = { points: [] };
+  if (!D.about.points) D.about.points = [];
+  D.about.points.push('نقطة جديدة');
+  renderPoints();
+}
+function removePoint(i) {
+  D.about.points.splice(i, 1);
+  renderPoints();
+}
+function collectPoints() { /* collected live via oninput */ }
 
-  function closePropModal() {
-    document.getElementById('prop-modal').classList.remove('open');
-    editingPropId = null;
-  }
+// ═══════════════════════════════════════════════
+//  LOCATIONS
+// ═══════════════════════════════════════════════
+function renderLocations() {
+  const el = document.getElementById('loc-grid');
+  el.innerHTML = '';
+  (D.locations?.items || []).forEach((l, i) => {
+    el.insertAdjacentHTML('beforeend', `
+      <div class="loc-card">
+        <div class="loc-img"><img src="${l.image}" onerror="this.style.display='none'" alt=""></div>
+        <div class="loc-body">
+          <div class="fg"><label>الاسم</label><input value="${l.name}" oninput="D.locations.items[${i}].name=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--cream)"></div>
+          <div class="fg"><label>العنوان الفرعي</label><input value="${l.subtitle}" oninput="D.locations.items[${i}].subtitle=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--cream)"></div>
+          <div class="fg"><label>رابط الصورة</label><input value="${l.image}" dir="ltr" oninput="D.locations.items[${i}].image=this.value;this.closest('.loc-card').querySelector('img').src=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:12px;background:var(--cream)"></div>
+        </div>
+      </div>`);
+  });
+}
+function collectLocations() { /* collected live via oninput */ }
 
-  function saveProp() {
-    const p = {
-      id:           editingPropId || 'p' + Date.now(),
-      title:        document.getElementById('prop-title').value.trim(),
-      location:     document.getElementById('prop-location').value.trim(),
-      tag:          document.getElementById('prop-tag').value,
-      area:         document.getElementById('prop-area').value.trim(),
-      beds:         document.getElementById('prop-beds').value.trim(),
-      baths:        document.getElementById('prop-baths').value.trim(),
-      price:        document.getElementById('prop-price').value.trim(),
-      price_suffix: document.getElementById('prop-price-suffix').value.trim(),
-      image:        document.getElementById('prop-image').value.trim(),
-      image_alt:    document.getElementById('prop-img-alt').value.trim(),
-    };
-    if (!p.title) { showToast('اكتب عنوان العقار', true); return; }
-    if (!DATA.properties) DATA.properties = [];
-    if (editingPropId) {
-      const idx = DATA.properties.findIndex(x => x.id === editingPropId);
-      if (idx > -1) DATA.properties[idx] = p;
-    } else {
-      DATA.properties.push(p);
-    }
-    renderProps();
-    closePropModal();
-    showToast('تم حفظ العقار محلياً — اضغط «حفظ ونشر» للنشر');
-  }
+// ═══════════════════════════════════════════════
+//  PROCESS STEPS
+// ═══════════════════════════════════════════════
+function renderSteps() {
+  const el = document.getElementById('process-steps');
+  el.innerHTML = '';
+  (D.process?.steps || []).forEach((s, i) => {
+    el.insertAdjacentHTML('beforeend', `
+      <div class="list-item">
+        <div class="list-item-fields">
+          <input value="${s.number}" placeholder="رقم الخطوة" oninput="D.process.steps[${i}].number=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:12px;background:var(--paper);color:var(--muted)">
+          <input value="${s.title}" placeholder="عنوان الخطوة" oninput="D.process.steps[${i}].title=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;font-weight:600;background:var(--paper)">
+          <textarea placeholder="وصف الخطوة" oninput="D.process.steps[${i}].description=this.value" style="padding:8px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--paper);resize:vertical;min-height:58px">${s.description}</textarea>
+        </div>
+        <div class="list-item-actions">
+          <button class="btn btn-danger btn-sm" onclick="removeStep(${i})">حذف</button>
+        </div>
+      </div>`);
+  });
+}
+function removeStep(i) { D.process.steps.splice(i, 1); renderSteps(); }
+function collectSteps() { /* live */ }
 
-  function deleteProp() {
-    if (!editingPropId) return;
-    if (!confirm('هل أنت متأكد من حذف هذا العقار؟')) return;
-    DATA.properties = DATA.properties.filter(x => x.id !== editingPropId);
-    renderProps();
-    closePropModal();
-    showToast('تم الحذف — اضغط «حفظ ونشر» للنشر');
-  }
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+function go(name, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+}
 
-  // ─── Save & Publish ───────────────────────────────────────
-  async function saveAll() {
-    collectContact();
-    setStatus('جارٍ النشر…', 'saving');
-    const btn = document.querySelector('.btn-primary');
-    btn.disabled = true; btn.textContent = 'جارٍ الرفع…';
-    try {
-      const payload = { ...DATA };
-      delete payload._sha;
-      const json = JSON.stringify(payload, null, 2);
-      const res = await ghPut(DATA_PATH, json, DATA._sha, 'تحديث بيانات الموقع من لوحة التحكم');
-      if (res.content) {
-        DATA._sha = res.content.sha;
-        setStatus('تم النشر ✓', 'saved');
-        showToast('تم النشر بنجاح! سيظهر التحديث خلال دقيقة ✓');
-      } else {
-        throw new Error(res.message || 'فشل الرفع');
-      }
-    } catch(e) {
-      setStatus('خطأ في النشر', 'error');
-      showToast('فشل النشر: ' + e.message, true);
-    }
-    btn.disabled = false; btn.textContent = 'حفظ ونشر';
-  }
+// ═══════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════
+function v(id, val) { const el=document.getElementById(id); if(el) el.value = val||''; }
+function g(id)      { const el=document.getElementById(id); return el ? el.value.trim() : ''; }
+function prev(imgId, url) {
+  const el = document.getElementById(imgId);
+  if (!el) return;
+  if (url) { el.src = url; el.className = 'img-prev show'; }
+  else      { el.className = 'img-prev'; }
+}
 
-  // ─── Settings ─────────────────────────────────────────────
-  function loadSettingsForm() {
-    const s = getSettings();
-    document.getElementById('s-owner').value  = s.owner;
-    document.getElementById('s-repo').value   = s.repo;
-    document.getElementById('s-branch').value = s.branch;
-  }
-
-  function saveSettings() {
-    localStorage.setItem('sw_owner',  document.getElementById('s-owner').value.trim());
-    localStorage.setItem('sw_repo',   document.getElementById('s-repo').value.trim());
-    localStorage.setItem('sw_branch', document.getElementById('s-branch').value.trim());
-    const np = document.getElementById('s-newpass').value;
-    if (np) localStorage.setItem('sw_pass', np);
-    showToast('تم حفظ الإعدادات ✓');
-  }
-
-  // ─── Helpers ──────────────────────────────────────────────
-  function showPage(name, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    btn.classList.add('active');
-  }
-
-  function previewSite() {
-    const s = getSettings();
-    window.open(`https://${s.owner}.github.io/${s.repo}/`, '_blank');
-  }
-
-  function previewImg(url) {
-    const img = document.getElementById('prop-img-preview');
-    if (url) { img.src = url; img.className = 'img-preview show'; }
-    else { img.className = 'img-preview'; }
-  }
-
-  let toastTimer;
-  function showToast(msg, isError) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = isError ? 'error show' : 'show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.className = '', 4000);
-  }
-
-  function setStatus(msg, type) {
-    const el = document.getElementById('save-status');
-    el.textContent = msg;
-    el.className = 'save-status ' + (type || '');
-  }
+let _tt;
+function toast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = (err?'err ':' ') + 'show';
+  clearTimeout(_tt);
+  _tt = setTimeout(()=>t.className='', 4000);
+}
+function setStatus(msg, type) {
+  const el = document.getElementById('save-status');
+  el.textContent = msg;
+  el.className = type || '';
+}
 </script>
 </body>
 </html>
