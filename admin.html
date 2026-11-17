@@ -453,7 +453,7 @@
 
   // ─── State ────────────────────────────────────────────────
   let DATA = {};
-  let GH_TOKEN = '';
+  let GH_TOKEN = localStorage.getItem('sw_gh_token') || '';
   let editingPropId = null;
 
   // ─── Login ────────────────────────────────────────────────
@@ -475,7 +475,7 @@
       return;
     }
     GH_TOKEN = token;
-    sessionStorage.setItem('sw_token', token);
+    localStorage.setItem('sw_gh_token', token); // حفظ دائم في المتصفح
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     loadData();
@@ -484,20 +484,19 @@
   document.getElementById('pass-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-  // Auto-login if token in session
+  // Auto-login directly — no password screen
   window.addEventListener('DOMContentLoaded', () => {
-    const t = sessionStorage.getItem('sw_token');
-    if (t) {
-      GH_TOKEN = t;
+    loadSettingsForm();
+    // لو التوكن محفوظ من قبل، ادخل مباشرة بدون شاشة تسجيل
+    if (GH_TOKEN) {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       loadData();
     }
-    loadSettingsForm();
   });
 
   function doLogout() {
-    sessionStorage.removeItem('sw_token');
+    localStorage.removeItem('sw_gh_token');
     location.reload();
   }
 
