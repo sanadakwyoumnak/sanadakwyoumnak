@@ -477,10 +477,13 @@ async function loadData() {
   setStatus('جارٍ التحميل…', 'saving');
   try {
     const r = await fetch(ghAPI(DATA_FILE), { headers: ghHdr() });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
     if (j.message) throw new Error(j.message);
     SHA = j.sha;
-    D   = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
+    // decode base64 → UTF-8 safely
+    const raw = Uint8Array.from(atob(j.content.replace(/\s/g,'')), c => c.charCodeAt(0));
+    D   = JSON.parse(new TextDecoder().decode(raw));
     fillAll();
     setStatus('تم التحميل ✓', 'saved');
   } catch(e) {
@@ -495,7 +498,11 @@ async function publishAll() {
   btn.disabled = true; btn.textContent = 'جارٍ النشر…';
   setStatus('جارٍ النشر…', 'saving');
   try {
-    const body = { message: 'تحديث بيانات الموقع من لوحة التحكم', content: btoa(unescape(encodeURIComponent(JSON.stringify(D, null, 2)))), branch: GH_BRANCH, sha: SHA };
+    const json = JSON.stringify(D, null, 2);
+    const bytes = new TextEncoder().encode(json);
+    let binary = '';
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    const body = { message: 'تحديث بيانات الموقع من لوحة التحكم', content: btoa(binary), branch: GH_BRANCH, sha: SHA };
     const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${DATA_FILE}`, { method: 'PUT', headers: ghHdr(), body: JSON.stringify(body) });
     const j = await r.json();
     if (!j.content) throw new Error(j.message || 'فشل');
