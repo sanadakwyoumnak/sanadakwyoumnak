@@ -122,14 +122,6 @@
     .hero-copy > p { max-width: 455px; margin: 0; color: var(--muted); font-size: 17px; line-height: 2; }
     .hero-cta { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
     .hero-note { display: flex; align-items: center; gap: 11px; margin-top: 43px; }
-    .avatar-stack { display: flex; direction: ltr; padding-left: 5px; }
-    .avatar-stack span {
-      display: grid; place-items: center; width: 31px; height: 31px; margin-left: -6px;
-      border: 2px solid var(--cream); border-radius: 50%; color: var(--green); background: #d9e3da;
-      font-size: 10px; font-weight: 700;
-    }
-    .avatar-stack span:nth-child(2) { background: #e9d8bd; }
-    .avatar-stack span:nth-child(3) { background: #c8d6ca; }
     .hero-note p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
     .hero-note strong { color: var(--ink); font-size: 14px; }
     .hero-visual { position: relative; min-height: 510px; }
