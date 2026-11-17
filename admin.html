@@ -19,7 +19,7 @@
 
     /* Login */
     #login-screen {
-      display: flex; align-items: center; justify-content: center;
+      display: none; align-items: center; justify-content: center;
       min-height: 100vh; background: var(--green-dark);
     }
     .login-box {
@@ -233,26 +233,22 @@
 </head>
 <body>
 
-<!-- Login -->
+<!-- Token Setup (shown only on first visit) -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
       <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="13" fill="#21483e"/><path d="M8 22.5 24 10l16 12.5" stroke="#E3C58A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 21.5V34h21V21.5M20 34v-8h8v8" stroke="#F7F5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div><span>سندك ويمناك</span><small>لوحة التحكم</small></div>
+      <div><span>سندك ويمناك</span><small>إعداد أولي لمرة واحدة</small></div>
     </div>
-    <h2>تسجيل الدخول</h2>
-    <p>أدخل بيانات الدخول للوصول للوحة التحكم</p>
-    <div class="field">
-      <label>كلمة المرور</label>
-      <input type="password" id="pass-input" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <div class="field">
+    <h2>أدخل GitHub Token</h2>
+    <p>يُحفظ في متصفحك فقط ولن يُطلب مرة أخرى</p>
+    <div class="field" style="margin-top:20px">
       <label>GitHub Token</label>
-      <input type="password" id="token-input" placeholder="ghp_..." autocomplete="off">
-      <div style="font-size:11px;color:var(--muted);margin-top:5px">توكن بصلاحية <code>repo</code> — محفوظ في المتصفح فقط</div>
+      <input type="password" id="token-input" placeholder="ghp_..." autocomplete="off" dir="ltr">
+      <div style="font-size:11px;color:var(--muted);margin-top:5px">توكن بصلاحية <code>repo</code> من github.com/settings/tokens</div>
     </div>
-    <button class="btn btn-primary" onclick="doLogin()">دخول</button>
-    <div id="login-error">كلمة المرور غلط أو التوكن ناقص</div>
+    <button class="btn btn-primary" onclick="doLogin()">دخول وحفظ</button>
+    <div id="login-error" style="display:none;color:var(--red);font-size:13px;margin-top:10px;text-align:center">التوكن غير صحيح، تأكد أنه يبدأ بـ ghp_</div>
   </div>
 </div>
 
@@ -467,31 +463,30 @@
   }
 
   function doLogin() {
-    const pass  = document.getElementById('pass-input').value;
     const token = document.getElementById('token-input').value.trim();
-    const s = getSettings();
-    if (pass !== s.pass || !token.startsWith('ghp_')) {
+    if (!token.startsWith('ghp_')) {
       document.getElementById('login-error').style.display = 'block';
       return;
     }
     GH_TOKEN = token;
-    localStorage.setItem('sw_gh_token', token); // حفظ دائم في المتصفح
+    localStorage.setItem('sw_gh_token', token);
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     loadData();
   }
 
-  document.getElementById('pass-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-  document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+  });
 
-  // Auto-login directly — no password screen
+  // Auto-login — مباشر إذا التوكن محفوظ
   window.addEventListener('DOMContentLoaded', () => {
     loadSettingsForm();
-    // لو التوكن محفوظ من قبل، ادخل مباشرة بدون شاشة تسجيل
     if (GH_TOKEN) {
-      document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       loadData();
+    } else {
+      document.getElementById('login-screen').style.display = 'flex';
     }
   });
 
