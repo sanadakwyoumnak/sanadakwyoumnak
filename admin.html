@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم — سندك ويمناك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #21483e; --green-dark: #18372f; --gold: #c99c59;
+      --cream: #f7f5ef; --paper: #fffefa; --ink: #1d302d;
+      --muted: #71817a; --line: rgba(29,48,45,.12);
+      --red: #c0392b; --sans: "IBM Plex Sans Arabic","DM Sans",sans-serif;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--sans); background: #efeee8; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+    /* Login */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; background: var(--green-dark);
+    }
+    .login-box {
+      width: min(380px, calc(100% - 40px)); padding: 40px;
+      background: var(--paper); border-radius: 20px;
+      box-shadow: 0 30px 60px rgba(0,0,0,.25);
+    }
+    .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .login-logo span { font-size: 20px; font-weight: 700; color: var(--green); }
+    .login-logo small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+    .login-box h2 { font-size: 22px; margin-bottom: 6px; }
+    .login-box p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; }
+    .field input {
+      width: 100%; padding: 11px 14px; border: 1px solid var(--line);
+      border-radius: 10px; font: inherit; font-size: 14px;
+      background: var(--cream); transition: border-color .2s;
+    }
+    .field input:focus { outline: none; border-color: var(--green); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 22px; border: none; border-radius: 99px;
+      font: 600 14px var(--sans); cursor: pointer; transition: all .2s;
+    }
+    .btn-primary { background: var(--green); color: white; width: 100%; min-height: 46px; font-size: 15px; }
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-danger { background: #fdf0ef; color: var(--red); border: 1px solid #f5c6c3; }
+    .btn-danger:hover { background: #fce4e2; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+    .btn-gold { background: var(--gold); color: white; }
+    .btn-gold:hover { background: #b8893e; }
+    #login-error { display: none; color: var(--red); font-size: 13px; margin-top: 10px; text-align: center; }
+
+    /* App */
+    #app { display: none; min-height: 100vh; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; height: 64px;
+      background: rgba(255,254,250,.95); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-brand { font-size: 16px; font-weight: 700; color: var(--green); }
+    .topbar-brand small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+    .save-status { font-size: 12px; color: var(--muted); }
+    .save-status.saving { color: var(--gold); }
+    .save-status.saved { color: #2e7d52; }
+    .save-status.error { color: var(--red); }
+
+    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 64px); }
+    .sidebar {
+      padding: 24px 16px; background: var(--paper);
+      border-left: 1px solid var(--line);
+    }
+    .nav-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .08em; padding: 0 10px; margin-bottom: 8px; margin-top: 20px; }
+    .nav-label:first-child { margin-top: 0; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 10px 12px; border: none; border-radius: 10px;
+      font: 500 14px var(--sans); color: var(--ink); background: transparent;
+      cursor: pointer; transition: all .18s; text-align: right;
+    }
+    .nav-item:hover { background: var(--cream); }
+    .nav-item.active { background: #e4ede9; color: var(--green); font-weight: 600; }
+    .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+    .content { padding: 32px 36px; overflow-y: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-size: 24px; font-weight: 700; }
+    .page-header p { color: var(--muted); font-size: 14px; margin-top: 5px; }
+
+    /* Cards */
+    .card {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
+    }
+    .card-header h3 { font-size: 16px; font-weight: 600; }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-full { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 13px; font-weight: 600; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 10px 13px; border: 1px solid var(--line);
+      border-radius: 9px; font: inherit; font-size: 14px;
+      background: var(--cream); transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--green);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-hint { font-size: 11px; color: var(--muted); }
+
+    /* Property cards */
+    .prop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .prop-card {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: var(--radius); overflow: hidden; position: relative;
+      transition: box-shadow .2s;
+    }
+    .prop-card:hover { box-shadow: 0 8px 24px rgba(29,48,45,.1); }
+    .prop-card-img {
+      height: 160px; background: #dce2d8; overflow: hidden;
+    }
+    .prop-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .prop-card-body { padding: 14px 16px; }
+    .prop-card-tag {
+      display: inline-block; padding: 3px 10px; border-radius: 99px;
+      font-size: 11px; font-weight: 600; margin-bottom: 8px;
+      background: #e4ede9; color: var(--green);
+    }
+    .prop-card-tag.rent { background: #fff3e0; color: #b8600a; }
+    .prop-card-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .prop-card-body small { color: var(--muted); font-size: 12px; }
+    .prop-card-price { font-size: 16px; font-weight: 700; color: var(--green); margin-top: 10px; }
+    .prop-card-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+    .prop-card-actions .btn { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
+    .add-prop-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border: 2px dashed var(--line); border-radius: var(--radius);
+      padding: 32px; cursor: pointer; color: var(--muted); font-size: 14px;
+      font-weight: 500; background: transparent; width: 100%; transition: all .2s;
+      font-family: var(--sans);
+    }
+    .add-prop-btn:hover { border-color: var(--green); color: var(--green); background: #f0f5f2; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .stat-card {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 20px 22px;
+    }
+    .stat-card label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .stat-card input {
+      display: block; width: 100%; margin-top: 8px; padding: 9px 12px;
+      border: 1px solid var(--line); border-radius: 9px;
+      font: 600 18px var(--sans); background: var(--cream);
+      color: var(--green); transition: border-color .2s;
+    }
+    .stat-card input:focus { outline: none; border-color: var(--green); }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--paper); border-radius: 18px; width: min(620px,100%);
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 30px 70px rgba(0,0,0,.2);
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 26px; border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; background: var(--paper); z-index: 1;
+    }
+    .modal-header h3 { font-size: 18px; font-weight: 700; }
+    .modal-close {
+      display: grid; place-items: center; width: 34px; height: 34px;
+      border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
+      background: transparent; font-size: 18px; color: var(--muted);
+      transition: all .18s;
+    }
+    .modal-close:hover { background: var(--cream); color: var(--ink); }
+    .modal-body { padding: 26px; }
+    .modal-footer {
+      display: flex; gap: 10px; justify-content: flex-end;
+      padding: 18px 26px; border-top: 1px solid var(--line);
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #1d302d; color: white; padding: 12px 22px;
+      border-radius: 99px; font-size: 14px; font-weight: 500;
+      transition: transform .35s cubic-bezier(.2,.8,.2,1); z-index: 999;
+      white-space: nowrap;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.error { background: var(--red); }
+
+    /* Config */
+    .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Image preview */
+    .img-preview { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
+    .img-preview.show { display: block; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .content { padding: 20px 18px; }
+      .form-grid, .form-grid.cols-3 { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="13" fill="#21483e"/><path d="M8 22.5 24 10l16 12.5" stroke="#E3C58A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 21.5V34h21V21.5M20 34v-8h8v8" stroke="#F7F5EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><span>سندك ويمناك</span><small>لوحة التحكم</small></div>
+    </div>
+    <h2>تسجيل الدخول</h2>
+    <p>أدخل بيانات الدخول للوصول للوحة التحكم</p>
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input type="password" id="pass-input" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="field">
+      <label>GitHub Token</label>
+      <input type="password" id="token-input" placeholder="ghp_..." autocomplete="off">
+      <div style="font-size:11px;color:var(--muted);margin-top:5px">توكن بصلاحية <code>repo</code> — محفوظ في المتصفح فقط</div>
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()">دخول</button>
+    <div id="login-error">كلمة المرور غلط أو التوكن ناقص</div>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand">لوحة التحكم <small>سندك ويمناك</small></div>
+    <div class="topbar-actions">
+      <span class="save-status" id="save-status"></span>
+      <button class="btn btn-ghost" onclick="previewSite()">معاينة الموقع</button>
+      <button class="btn btn-primary" onclick="saveAll()">حفظ ونشر</button>
+      <button class="btn btn-ghost" onclick="doLogout()" style="font-size:12px">خروج</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="nav-label">الأقسام</div>
+      <button class="nav-item active" onclick="showPage('properties',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9 20v-6h6v6"/></svg>
+        العقارات
+      </button>
+      <button class="nav-item" onclick="showPage('contact',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7.2 3.8h3l1.5 4-2 1.8a15 15 0 0 0 4.7 4.7l1.8-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z"/></svg>
+        التواصل
+      </button>
+      <button class="nav-item" onclick="showPage('stats',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 26.5V5.5M5 26.5h22M9 22v-6h5v6M17 22V10h5v12"/></svg>
+        الإحصائيات
+      </button>
+      <div class="nav-label">النظام</div>
+      <button class="nav-item" onclick="showPage('settings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        الإعدادات
+      </button>
+    </aside>
+
+    <main class="content">
+
+      <!-- Properties -->
+      <div class="page active" id="page-properties">
+        <div class="page-header">
+          <h1>العقارات</h1>
+          <p>أضف وعدّل وأدر عقاراتك المعروضة</p>
+        </div>
+        <div class="prop-grid" id="prop-grid"></div>
+        <button class="add-prop-btn" onclick="openPropModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg>
+          إضافة عقار جديد
+        </button>
+      </div>
+
+      <!-- Contact -->
+      <div class="page" id="page-contact">
+        <div class="page-header">
+          <h1>معلومات التواصل</h1>
+          <p>رقم الهاتف وواتساب الظاهر في الموقع</p>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>بيانات التواصل</h3></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>رقم الهاتف (بدون +)</label>
+              <input type="text" id="c-phone" placeholder="966563055124" dir="ltr">
+              <span class="form-hint">مثال: 966563055124</span>
+            </div>
+            <div class="form-group">
+              <label>رقم العرض (للزوار)</label>
+              <input type="text" id="c-phone-display" placeholder="056 305 5124" dir="ltr">
+            </div>
+            <div class="form-group">
+              <label>رقم واتساب (بدون +)</label>
+              <input type="text" id="c-whatsapp" placeholder="966563055124" dir="ltr">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="page" id="page-stats">
+        <div class="page-header">
+          <h1>الإحصائيات</h1>
+          <p>الأرقام الظاهرة في أعلى الصفحة الرئيسية</p>
+        </div>
+        <div class="stats-grid" id="stats-grid"></div>
+      </div>
+
+      <!-- Settings -->
+      <div class="page" id="page-settings">
+        <div class="page-header">
+          <h1>الإعدادات</h1>
+          <p>إعدادات الربط مع GitHub</p>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>إعدادات GitHub</h3></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>اسم المستخدم</label>
+              <input type="text" id="s-owner" placeholder="sanadakwyoumnak" dir="ltr">
+            </div>
+            <div class="form-group">
+              <label>اسم الـ Repository</label>
+              <input type="text" id="s-repo" placeholder="sanadakwyoumnak" dir="ltr">
+            </div>
+            <div class="form-group">
+              <label>الفرع</label>
+              <input type="text" id="s-branch" placeholder="main" dir="ltr">
+            </div>
+            <div class="form-group">
+              <label>تغيير كلمة المرور</label>
+              <input type="password" id="s-newpass" placeholder="اتركه فاضياً لعدم التغيير">
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <button class="btn btn-primary" onclick="saveSettings()" style="width:auto;padding:11px 28px">حفظ الإعدادات</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Property Modal -->
+<div class="modal-overlay" id="prop-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">عقار جديد</h3>
+      <button class="modal-close" onclick="closePropModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="prop-id">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>عنوان العقار</label>
+          <input type="text" id="prop-title" placeholder="مثال: فيلا عصرية بإضاءة طبيعية">
+        </div>
+        <div class="form-group">
+          <label>الموقع</label>
+          <input type="text" id="prop-location" placeholder="جدة، حي الروضة">
+        </div>
+        <div class="form-group">
+          <label>الحالة</label>
+          <select id="prop-tag">
+            <option value="للبيع">للبيع</option>
+            <option value="للإيجار">للإيجار</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>المساحة</label>
+          <input type="text" id="prop-area" placeholder="٣٢٠ م²">
+        </div>
+        <div class="form-group">
+          <label>غرف النوم</label>
+          <input type="text" id="prop-beds" placeholder="٤ غرف نوم">
+        </div>
+        <div class="form-group">
+          <label>الحمامات</label>
+          <input type="text" id="prop-baths" placeholder="٣ حمامات">
+        </div>
+        <div class="form-group">
+          <label>السعر (الأرقام فقط)</label>
+          <input type="text" id="prop-price" placeholder="٢٬٨٥٠٬٠٠٠" dir="ltr">
+        </div>
+        <div class="form-group">
+          <label>لاحقة السعر</label>
+          <input type="text" id="prop-price-suffix" placeholder="ر.س أو ر.س / سنوي">
+        </div>
+        <div class="form-group form-full">
+          <label>رابط الصورة</label>
+          <input type="url" id="prop-image" placeholder="https://..." dir="ltr" oninput="previewImg(this.value)">
+          <span class="form-hint">رابط صورة من unsplash أو أي رابط مباشر</span>
+          <img id="prop-img-preview" class="img-preview" alt="معاينة الصورة">
+        </div>
+        <div class="form-group form-full">
+          <label>وصف الصورة (للإمكانية)</label>
+          <input type="text" id="prop-img-alt" placeholder="وصف مختصر للصورة">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closePropModal()">إلغاء</button>
+      <button class="btn btn-danger" id="delete-prop-btn" onclick="deleteProp()" style="display:none">حذف العقار</button>
+      <button class="btn btn-primary" onclick="saveProp()">حفظ العقار</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ─── Config ───────────────────────────────────────────────
+  const DEFAULT_PASS = 'sandakwaa2024';
+  const REPO_OWNER   = 'sanadakwyoumnak';
+  const REPO_NAME    = 'sanadakwyoumnak';
+  const BRANCH       = 'main';
+  const DATA_PATH    = 'data.json';
+
+  // ─── State ────────────────────────────────────────────────
+  let DATA = {};
+  let GH_TOKEN = '';
+  let editingPropId = null;
+
+  // ─── Login ────────────────────────────────────────────────
+  function getSettings() {
+    return {
+      owner:  localStorage.getItem('sw_owner')  || REPO_OWNER,
+      repo:   localStorage.getItem('sw_repo')   || REPO_NAME,
+      branch: localStorage.getItem('sw_branch') || BRANCH,
+      pass:   localStorage.getItem('sw_pass')   || DEFAULT_PASS,
+    };
+  }
+
+  function doLogin() {
+    const pass  = document.getElementById('pass-input').value;
+    const token = document.getElementById('token-input').value.trim();
+    const s = getSettings();
+    if (pass !== s.pass || !token.startsWith('ghp_')) {
+      document.getElementById('login-error').style.display = 'block';
+      return;
+    }
+    GH_TOKEN = token;
+    sessionStorage.setItem('sw_token', token);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadData();
+  }
+
+  document.getElementById('pass-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  // Auto-login if token in session
+  window.addEventListener('DOMContentLoaded', () => {
+    const t = sessionStorage.getItem('sw_token');
+    if (t) {
+      GH_TOKEN = t;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadData();
+    }
+    loadSettingsForm();
+  });
+
+  function doLogout() {
+    sessionStorage.removeItem('sw_token');
+    location.reload();
+  }
+
+  // ─── GitHub API ───────────────────────────────────────────
+  function ghHeaders() {
+    return {
+      'Authorization': `Bearer ${GH_TOKEN}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+  }
+
+  async function ghGet(path) {
+    const s = getSettings();
+    const r = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}?ref=${s.branch}`, { headers: ghHeaders() });
+    return r.json();
+  }
+
+  async function ghPut(path, content, sha, message) {
+    const s = getSettings();
+    const body = { message, content: btoa(unescape(encodeURIComponent(content))), branch: s.branch };
+    if (sha) body.sha = sha;
+    const r = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`, {
+      method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body)
+    });
+    return r.json();
+  }
+
+  // ─── Load Data ────────────────────────────────────────────
+  async function loadData() {
+    setStatus('جارٍ التحميل…', 'saving');
+    try {
+      const file = await ghGet(DATA_PATH);
+      const json = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
+      DATA = JSON.parse(json);
+      DATA._sha = file.sha;
+      renderAll();
+      setStatus('تم التحميل ✓', 'saved');
+    } catch(e) {
+      setStatus('خطأ في التحميل', 'error');
+      showToast('خطأ في تحميل البيانات', true);
+    }
+  }
+
+  // ─── Render ───────────────────────────────────────────────
+  function renderAll() {
+    renderProps();
+    renderContact();
+    renderStats();
+  }
+
+  function renderProps() {
+    const grid = document.getElementById('prop-grid');
+    grid.innerHTML = '';
+    (DATA.properties || []).forEach(p => {
+      const isRent = p.tag === 'للإيجار';
+      grid.insertAdjacentHTML('beforeend', `
+        <div class="prop-card">
+          <div class="prop-card-img">
+            <img src="${p.image}" alt="${p.image_alt}" onerror="this.style.display='none'">
+          </div>
+          <div class="prop-card-body">
+            <span class="prop-card-tag ${isRent?'rent':''}">${p.tag}</span>
+            <h4>${p.title}</h4>
+            <small>${p.location}</small>
+            <div class="prop-card-price">${p.price} <span style="font-size:12px;font-weight:400;color:var(--muted)">${p.price_suffix}</span></div>
+          </div>
+          <div class="prop-card-actions">
+            <button class="btn btn-ghost" onclick="openPropModal('${p.id}')">تعديل</button>
+          </div>
+        </div>
+      `);
+    });
+  }
+
+  function renderContact() {
+    const c = DATA.contact || {};
+    document.getElementById('c-phone').value         = c.phone         || '';
+    document.getElementById('c-phone-display').value = c.phone_display || '';
+    document.getElementById('c-whatsapp').value      = c.whatsapp      || '';
+  }
+
+  function renderStats() {
+    const grid = document.getElementById('stats-grid');
+    grid.innerHTML = '';
+    (DATA.hero?.stats || []).forEach((s, i) => {
+      grid.insertAdjacentHTML('beforeend', `
+        <div class="stat-card">
+          <label>${s.label}</label>
+          <input type="text" value="${s.value}" data-stat-i="${i}" oninput="updateStat(${i},this.value)">
+        </div>
+      `);
+    });
+  }
+
+  // ─── Stat update ─────────────────────────────────────────
+  function updateStat(i, val) {
+    if (!DATA.hero) DATA.hero = { stats: [] };
+    DATA.hero.stats[i].value = val;
+  }
+
+  // ─── Contact update ───────────────────────────────────────
+  function collectContact() {
+    DATA.contact = {
+      phone:         document.getElementById('c-phone').value.trim(),
+      phone_display: document.getElementById('c-phone-display').value.trim(),
+      whatsapp:      document.getElementById('c-whatsapp').value.trim(),
+    };
+  }
+
+  // ─── Property Modal ───────────────────────────────────────
+  function openPropModal(id) {
+    editingPropId = id || null;
+    const modal = document.getElementById('prop-modal');
+    const delBtn = document.getElementById('delete-prop-btn');
+    document.getElementById('modal-title').textContent = id ? 'تعديل العقار' : 'عقار جديد';
+    delBtn.style.display = id ? 'inline-flex' : 'none';
+    if (id) {
+      const p = DATA.properties.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('prop-id').value           = p.id;
+      document.getElementById('prop-title').value        = p.title;
+      document.getElementById('prop-location').value     = p.location;
+      document.getElementById('prop-tag').value          = p.tag;
+      document.getElementById('prop-area').value         = p.area;
+      document.getElementById('prop-beds').value         = p.beds;
+      document.getElementById('prop-baths').value        = p.baths;
+      document.getElementById('prop-price').value        = p.price;
+      document.getElementById('prop-price-suffix').value = p.price_suffix;
+      document.getElementById('prop-image').value        = p.image;
+      document.getElementById('prop-img-alt').value      = p.image_alt;
+      previewImg(p.image);
+    } else {
+      ['prop-title','prop-location','prop-area','prop-beds','prop-baths','prop-price','prop-image','prop-img-alt'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('prop-price-suffix').value = 'ر.س';
+      document.getElementById('prop-tag').value = 'للبيع';
+      document.getElementById('prop-img-preview').className = 'img-preview';
+    }
+    modal.classList.add('open');
+  }
+
+  function closePropModal() {
+    document.getElementById('prop-modal').classList.remove('open');
+    editingPropId = null;
+  }
+
+  function saveProp() {
+    const p = {
+      id:           editingPropId || 'p' + Date.now(),
+      title:        document.getElementById('prop-title').value.trim(),
+      location:     document.getElementById('prop-location').value.trim(),
+      tag:          document.getElementById('prop-tag').value,
+      area:         document.getElementById('prop-area').value.trim(),
+      beds:         document.getElementById('prop-beds').value.trim(),
+      baths:        document.getElementById('prop-baths').value.trim(),
+      price:        document.getElementById('prop-price').value.trim(),
+      price_suffix: document.getElementById('prop-price-suffix').value.trim(),
+      image:        document.getElementById('prop-image').value.trim(),
+      image_alt:    document.getElementById('prop-img-alt').value.trim(),
+    };
+    if (!p.title) { showToast('اكتب عنوان العقار', true); return; }
+    if (!DATA.properties) DATA.properties = [];
+    if (editingPropId) {
+      const idx = DATA.properties.findIndex(x => x.id === editingPropId);
+      if (idx > -1) DATA.properties[idx] = p;
+    } else {
+      DATA.properties.push(p);
+    }
+    renderProps();
+    closePropModal();
+    showToast('تم حفظ العقار محلياً — اضغط «حفظ ونشر» للنشر');
+  }
+
+  function deleteProp() {
+    if (!editingPropId) return;
+    if (!confirm('هل أنت متأكد من حذف هذا العقار؟')) return;
+    DATA.properties = DATA.properties.filter(x => x.id !== editingPropId);
+    renderProps();
+    closePropModal();
+    showToast('تم الحذف — اضغط «حفظ ونشر» للنشر');
+  }
+
+  // ─── Save & Publish ───────────────────────────────────────
+  async function saveAll() {
+    collectContact();
+    setStatus('جارٍ النشر…', 'saving');
+    const btn = document.querySelector('.btn-primary');
+    btn.disabled = true; btn.textContent = 'جارٍ الرفع…';
+    try {
+      const payload = { ...DATA };
+      delete payload._sha;
+      const json = JSON.stringify(payload, null, 2);
+      const res = await ghPut(DATA_PATH, json, DATA._sha, 'تحديث بيانات الموقع من لوحة التحكم');
+      if (res.content) {
+        DATA._sha = res.content.sha;
+        setStatus('تم النشر ✓', 'saved');
+        showToast('تم النشر بنجاح! سيظهر التحديث خلال دقيقة ✓');
+      } else {
+        throw new Error(res.message || 'فشل الرفع');
+      }
+    } catch(e) {
+      setStatus('خطأ في النشر', 'error');
+      showToast('فشل النشر: ' + e.message, true);
+    }
+    btn.disabled = false; btn.textContent = 'حفظ ونشر';
+  }
+
+  // ─── Settings ─────────────────────────────────────────────
+  function loadSettingsForm() {
+    const s = getSettings();
+    document.getElementById('s-owner').value  = s.owner;
+    document.getElementById('s-repo').value   = s.repo;
+    document.getElementById('s-branch').value = s.branch;
+  }
+
+  function saveSettings() {
+    localStorage.setItem('sw_owner',  document.getElementById('s-owner').value.trim());
+    localStorage.setItem('sw_repo',   document.getElementById('s-repo').value.trim());
+    localStorage.setItem('sw_branch', document.getElementById('s-branch').value.trim());
+    const np = document.getElementById('s-newpass').value;
+    if (np) localStorage.setItem('sw_pass', np);
+    showToast('تم حفظ الإعدادات ✓');
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────
+  function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function previewSite() {
+    const s = getSettings();
+    window.open(`https://${s.owner}.github.io/${s.repo}/`, '_blank');
+  }
+
+  function previewImg(url) {
+    const img = document.getElementById('prop-img-preview');
+    if (url) { img.src = url; img.className = 'img-preview show'; }
+    else { img.className = 'img-preview'; }
+  }
+
+  let toastTimer;
+  function showToast(msg, isError) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = isError ? 'error show' : 'show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.className = '', 4000);
+  }
+
+  function setStatus(msg, type) {
+    const el = document.getElementById('save-status');
+    el.textContent = msg;
+    el.className = 'save-status ' + (type || '');
+  }
+</script>
+</body>
+</html>
