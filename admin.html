@@ -507,7 +507,7 @@ async function publishAll() {
     const bytes = new TextEncoder().encode(json);
     let binary = '';
     bytes.forEach(b => binary += String.fromCharCode(b));
-    const body = { message: 'تحديث بيانات الموقع من لوحة التحكم', content: btoa(binary), branch: GH_BRANCH, sha: SHA };
+    const body = { message: 'تحديث الموقع', content: btoa(binary), branch: GH_BRANCH, sha: SHA };
     const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${DATA_FILE}`, { method: 'PUT', headers: ghHdr(), body: JSON.stringify(body) });
     const j = await r.json();
     if (!j.content) throw new Error(j.message || 'فشل');
