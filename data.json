@@ -103,42 +103,42 @@
     "items": [
       {
         "id": "p1",
-        "title": "فيلا عصرية بإضاءة طبيعية",
+        "title": "فيلا فاخرة بمدخل مستقل وحديقة",
         "location": "جدة، حي الروضة",
         "tag": "للبيع",
         "area": "٣٢٠ م²",
-        "beds": "٤ غرف نوم",
-        "baths": "٥ حمامات",
-        "price": "٢٬٨٥٠٬٠٠٠",
+        "beds": "٥ غرف نوم",
+        "baths": "٤ حمامات",
+        "price": "٢٬٨٠٠٬٠٠٠",
         "price_suffix": "ر.س",
-        "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80",
-        "image_alt": "فيلا واسعة بتصميم عصري"
+        "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=900&q=80",
+        "image_alt": "فيلا فاخرة بمدخل مستقل وحديقة في جدة"
       },
       {
         "id": "p2",
-        "title": "منزل عائلي بحديقة خاصة",
-        "location": "المدينة المنورة، حي العريض",
-        "tag": "للبيع",
-        "area": "٢٨٠ م²",
-        "beds": "٤ غرف نوم",
-        "baths": "٤ حمامات",
-        "price": "١٬٧٥٠٬٠٠٠",
-        "price_suffix": "ر.س",
-        "image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80",
-        "image_alt": "منزل أنيق بحديقة خضراء"
+        "title": "شقة راقية بإطلالة على البحر",
+        "location": "جدة، حي الشاطئ",
+        "tag": "للإيجار",
+        "area": "١٨٥ م²",
+        "beds": "٣ غرف نوم",
+        "baths": "٣ حمامات",
+        "price": "١١٠٬٠٠٠",
+        "price_suffix": "ر.س / سنوي",
+        "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80",
+        "image_alt": "شقة راقية بإطلالة على البحر الأحمر جدة"
       },
       {
         "id": "p3",
-        "title": "شقة راقية بإطلالة مفتوحة",
-        "location": "جدة، حي الشاطئ",
-        "tag": "للإيجار",
-        "area": "١٨٠ م²",
-        "beds": "٣ غرف نوم",
+        "title": "منزل عائلي قرب المسجد النبوي",
+        "location": "المدينة المنورة، حي العريض",
+        "tag": "للبيع",
+        "area": "٢٦٠ م²",
+        "beds": "٤ غرف نوم",
         "baths": "٣ حمامات",
-        "price": "١٢٠٬٠٠٠",
-        "price_suffix": "ر.س / سنوي",
-        "image": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80",
-        "image_alt": "شقة فاخرة بتصميم داخلي هادئ"
+        "price": "١٬٦٥٠٬٠٠٠",
+        "price_suffix": "ر.س",
+        "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80",
+        "image_alt": "منزل عائلي في المدينة المنورة حي العريض"
       }
     ]
   },
