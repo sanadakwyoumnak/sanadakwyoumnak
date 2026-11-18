@@ -498,6 +498,11 @@ async function publishAll() {
   btn.disabled = true; btn.textContent = 'جارٍ النشر…';
   setStatus('جارٍ النشر…', 'saving');
   try {
+    // جيب الـ SHA الحالي من GitHub قبل النشر عشان تتجنب conflict
+    const latest = await fetch(ghAPI(DATA_FILE), { headers: ghHdr() });
+    const lj = await latest.json();
+    if (lj.sha) SHA = lj.sha;
+
     const json = JSON.stringify(D, null, 2);
     const bytes = new TextEncoder().encode(json);
     let binary = '';
