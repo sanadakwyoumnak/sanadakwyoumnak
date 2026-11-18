@@ -198,6 +198,7 @@ function applyProperties(pr) {
   if (propCta && pr.cta) propCta.childNodes[0].textContent = pr.cta + " ";
   // العقارات
   if (pr.items && pr.items.length) {
+    PROPS_DATA = pr.items; // حفظ للـ modal
     const grid = document.querySelector(".property-grid");
     if (!grid) return;
     grid.innerHTML = "";
@@ -223,7 +224,10 @@ function applyProperties(pr) {
             </div>
             <div class="property-bottom">
               <span class="property-price">${p.price} <small>${p.price_suffix}</small></span>
-              <a class="property-link" href="#contact">التفاصيل <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <button class="property-link" onclick="openPropDetails('${p.id}')" style="border:none;background:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;color:#21483e;font-size:12px;font-weight:600;font-family:inherit">
+                التفاصيل
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
             </div>
           </div>
         </article>`);
@@ -317,5 +321,55 @@ function setText(selector, text) {
   const el = document.querySelector(selector);
   if (el) el.textContent = text;
 }
+
+// ─── Property Details Modal ───────────────────────────────
+let PROPS_DATA = [];
+
+function openPropDetails(id) {
+  const p = PROPS_DATA.find(x => x.id === id);
+  if (!p) return;
+
+  const overlay = document.getElementById('prop-modal-overlay');
+  document.getElementById('prop-modal-img-el').src       = p.image;
+  document.getElementById('prop-modal-img-el').alt       = p.image_alt || '';
+  document.getElementById('prop-modal-title').textContent = p.title;
+  document.getElementById('prop-modal-loc-text').textContent = p.location;
+  document.getElementById('prop-modal-details').textContent  = p.details || '';
+  document.getElementById('prop-modal-price').textContent    = p.price + ' ' + p.price_suffix;
+
+  // tag
+  const tag = document.getElementById('prop-modal-tag');
+  tag.textContent = p.tag;
+  tag.style.background = p.tag === 'للإيجار' ? '#fff3e0' : '#e4ede9';
+  tag.style.color      = p.tag === 'للإيجار' ? '#b8600a' : '#21483e';
+
+  // specs
+  document.getElementById('prop-modal-specs').innerHTML = `
+    <span style="display:flex;align-items:center;gap:5px;color:#71817a;font-size:13px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#83938a" stroke-width="1.6"><path d="M3 11V5h6M21 13v6h-6M3 5l7 7m11 7-7-7"/></svg>${p.area}
+    </span>
+    <span style="color:#71817a;font-size:13px">${p.beds}</span>
+    <span style="color:#71817a;font-size:13px">${p.baths}</span>`;
+
+  // واتساب مع رسالة عن العقار
+  const waMsg = encodeURIComponent(`أهلاً، أود الاستفسار عن العقار: ${p.title} في ${p.location} بسعر ${p.price} ${p.price_suffix}`);
+  document.getElementById('prop-modal-wa').href = `https://wa.me/966563055124?text=${waMsg}`;
+
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePropDetails(e) {
+  if (e && e.target !== document.getElementById('prop-modal-overlay')) return;
+  document.getElementById('prop-modal-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('prop-modal-overlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+});
 
 loadSiteData();
